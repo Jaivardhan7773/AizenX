@@ -1,0 +1,93 @@
+import React, { useContext, useState } from "react";
+import { Container, Form, Button } from "react-bootstrap";
+import { NavLink, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import axios from "axios";
+import { AuthContext } from "../store/authentication";
+
+const Login = () => {
+  let {Token , setToken} = useContext(AuthContext);
+  const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+
+
+
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await axios.post("http://localhost:5000/login", formData);
+      toast.success(response.data.message);
+      setToken(response.data.token);
+      localStorage.setItem('user', JSON.stringify(response.data.user)); 
+      localStorage.setItem("Token", response.data.token);
+      window.location.reload();
+      navigate("/");
+
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Login failed.");
+    }
+  };
+
+  return (
+    <div className="d-flex justify-content-center align-items-center vh-100 w-100">
+      <Container className="d-flex justify-content-center">
+        <Form className="p-4 border rounded " onSubmit={handleSubmit} style={{
+        background: "rgba(99, 74, 74, 0.2)",
+        backdropFilter: "blur(10px)",
+        WebkitBackdropFilter: "blur(10px)",
+        borderRadius: "15px",
+        border: "1px solid rgba(255, 255, 255, 0.91)"
+      }}>
+          <h3 className="text-center mb-4 text-light">Login</h3>
+
+          <Form.Group className="mb-3">
+            <Form.Label className="text-light">Email address</Form.Label>
+            <Form.Control
+              type="email"
+              name="email"
+              placeholder="Enter email"
+              value={formData.email}
+              onChange={handleChange}
+              required
+            />
+          </Form.Group>
+
+          <Form.Group className="mb-3">
+            <Form.Label  className="text-light">Password</Form.Label>
+            <Form.Control
+              type="password"
+              name="password"
+              placeholder="Password"
+              value={formData.password}
+              onChange={handleChange}
+              required
+            />
+          </Form.Group>
+
+          <Button variant="primary" type="submit" className="w-100 text-light" >
+            Login
+          </Button>
+
+          <p className="text-center text-light mt-3">
+            Don't have an account?{" "}
+            <NavLink to="/signup" className="text-primary text-decoration-none">
+              Sign Up now
+            </NavLink>
+          </p>
+        </Form>
+      </Container>
+    </div>
+  );
+};
+
+export default Login;
