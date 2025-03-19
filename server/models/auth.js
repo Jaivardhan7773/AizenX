@@ -6,6 +6,7 @@ const AuthSchema = new mongoose.Schema({
     phone: { type: String, required: true , unique : true , trim :true},
     gender: { type: String, enum: ["male", "female", "other"], required: true },
     isAdmin: { type: Boolean, default: false },
+    isEditor: { type: Boolean, default: false },
   }, { versionKey: false });
 
 module.exports= mongoose.model('newAuth', AuthSchema);

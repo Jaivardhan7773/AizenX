@@ -1,24 +1,25 @@
 const express = require("express");
 const Blog = require("../models/blog");
+const editorMiddleware = require("../middleware/EditorMiddleware")
 const router = express.Router();
 
-router.post("/addBlog", async (req, res) => {
+router.post("/addBlog",editorMiddleware ,  async (req, res) => {
     try {
-        let { userId, title, image, description, tags } = req.body;
+        let { userId, title, image, description, tags , author } = req.body;
 
-        if (!userId || !title || !image || !description || !tags.length) {
+        if (!userId || !title || !image || !description || !tags.length ||!author) {
             return res.status(400).json({ message: "All fields are required." });
         }
 
-        // Validate word count instead of character count
+    
         if (description.split(" ").length < 300) {
             return res.status(400).json({ message: "Description must be at least 300 words." });
         }
 
-        // Ensure tags are an array
+     
         tags = Array.isArray(tags) ? tags : tags.split(",").map(tag => tag.trim());
 
-        const newBlog = new Blog({ userId, title, image, description, tags });
+        const newBlog = new Blog({ userId, title, image, description, tags , author });
         await newBlog.save();
         res.status(201).json({ message: "Blog posted successfully", blog: newBlog });
     } catch (error) {
@@ -26,7 +27,7 @@ router.post("/addBlog", async (req, res) => {
     }
 });
 
-router.get("/userBlogs/:userId", async (req, res) => {
+router.get("/userBlogs/:userId",editorMiddleware , async (req, res) => {
     try {
         const blogs = await Blog.find({ userId: req.params.userId }).sort({ createdAt: -1 });
         res.status(200).json(blogs);
@@ -56,12 +57,12 @@ router.get("/allBlogs", async (req, res) => {
     }
 });
 
-router.put("/updateBlog/:blogId", async (req, res) => {
+router.put("/updateBlog/:blogId",editorMiddleware ,  async (req, res) => {
     try {
-      const { title, image, description, tags } = req.body;
+      const { title, image, description, tags , author } = req.body;
       const updatedBlog = await Blog.findByIdAndUpdate(
         req.params.blogId,
-        { title, image, description, tags },
+        { title, image, description, tags , author },
         { new: true }
       );
   
@@ -77,7 +78,7 @@ router.put("/updateBlog/:blogId", async (req, res) => {
   });
   
 
-  router.delete("/deleteBlog/:blogId", async (req, res) => {
+  router.delete("/deleteBlog/:blogId",editorMiddleware , async (req, res) => {
     try {
       const deletedBlog = await Blog.findByIdAndDelete(req.params.blogId);
   

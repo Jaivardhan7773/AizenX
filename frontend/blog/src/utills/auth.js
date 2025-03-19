@@ -7,4 +7,8 @@ export const isAuthenticated = () => {
     const user = JSON.parse(localStorage.getItem("user") || "{}");
     return user?.isAdmin; 
   };
+  export const isEditor = () => {
+    const user = JSON.parse(localStorage.getItem("user") || "{}");
+    return user?.isEditor;
+  };
   

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import {  Button,  Carousel, Spinner, Form, Modal } from "react-bootstrap";
-import {  Row } from "react-bootstrap";
+import { Button, Carousel, Spinner, Form, Modal } from "react-bootstrap";
+import { Row } from "react-bootstrap";
 import axios from "axios";
 import { toast } from "react-toastify";
 
@@ -31,9 +31,11 @@ const AdminCarousel = () => {
   const handleAdd = async () => {
     if (isProcessing) return;
     setIsProcessing(true);
-
+    const token = localStorage.getItem("Token");
     try {
-      const res = await axios.post("http://localhost:5000/addCar", formData);
+      const res = await axios.post("http://localhost:5000/addCar", formData, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
       setCarouselItems([...carouselItems, res.data.data]);
       setShowModal(false);
       setFormData({ title: "", image: "", description: "" });
@@ -48,9 +50,11 @@ const AdminCarousel = () => {
 
   const handleDeletecar = async (id) => {
     if (!window.confirm("Are you sure you want to delete this item?")) return;
-
+    const token = localStorage.getItem("Token");
     try {
-      await axios.delete(`http://localhost:5000/deleteCar/${id}`);
+      await axios.delete(`http://localhost:5000/deleteCar/${id}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
       setCarouselItems(carouselItems.filter((item) => item._id !== id));
       toast.success("Carousel deleted successfully");
     } catch (error) {
@@ -69,9 +73,11 @@ const AdminCarousel = () => {
   const handleUpdatecar = async () => {
     if (isProcessing || !editingItem) return;
     setIsProcessing(true);
-
+    const token = localStorage.getItem("Token");
     try {
-      const response = await axios.put(`http://localhost:5000/updateCar/${editingItem._id}`, formData);
+      const response = await axios.put(`http://localhost:5000/updateCar/${editingItem._id}`, formData, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
       setCarouselItems(
         carouselItems.map((item) => (item._id === editingItem._id ? response.data.data : item))
       );

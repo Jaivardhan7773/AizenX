@@ -22,27 +22,21 @@ const BlogDetails = () => {
   };
 
   return (
-<Container className="mt-4">
+    <>
+    <div className="bg-light">
+<Container className="pt-5">
   {blog ? (
     <Card
-      className="mb-5 pb-5 text-white"
-      style={{
-        background: "rgba(0, 0, 0, 0.5)",  
-        backdropFilter: "blur(10px)", 
-        WebkitBackdropFilter: "blur(10px)",
-        borderRadius: "15px",
-        border: "1px solid rgba(255, 255, 255, 0.3)"
-      }}
-    >
+      className="mb-5 pb-5  d-flex flex-column align-items-center" >
       <Card.Title className="text-center">{blog.title}</Card.Title>
       <Card.Text className="text-center">
-        <strong>Author</strong> {blog.tags.join(", ")}
+         {blog.tags.join("\u00A0·\u00A0")}
       </Card.Text>
       <Card.Img
         variant="top"
         className="w-100 mb-5"
         src={blog.image}
-        style={{ maxHeight: "700px", objectFit: "contain" }}
+        style={{ maxHeight: "800px", objectFit: "cover" ,maxWidth:"800px"  }}
       />
       <Card.Body>
         <Card.Text>{blog.description}</Card.Text>
@@ -52,7 +46,8 @@ const BlogDetails = () => {
     <p className="text-center text-white">Loading blog...</p>  
   )}
 </Container>
-
+</div>
+</>
   );
 };
 

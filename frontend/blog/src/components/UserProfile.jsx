@@ -31,8 +31,11 @@ const UserProfile = () => {
   };
 
   const handleUpdate = async () => {
+    const token = localStorage.getItem("Token");
     try {
-      const response = await axios.put(`http://localhost:5000/updateUser/${user._id}`, updatedUser);
+      const response = await axios.put(`http://localhost:5000/updateUser/${user._id}`, updatedUser , {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       toast.success("Profile updated successfully!");
 
       localStorage.setItem("user", JSON.stringify(response.data));

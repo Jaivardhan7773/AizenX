@@ -11,6 +11,7 @@ const Myblogs = () => {
     image: "",
     description: "",
     tags: "",
+    author:"",
   });
 
   const [blogs, setBlogs] = useState([]);
@@ -31,8 +32,11 @@ const Myblogs = () => {
   }, []); 
 
   const fetchBlogs = async () => {
+    const token = localStorage.getItem("Token");
     try {
-      const response = await axios.get(`http://localhost:5000/userBlogs/${userId}`);
+      const response = await axios.get(`http://localhost:5000/userBlogs/${userId}`, {
+        headers : {Authorization: `Bearer ${token}`},
+      });
       setBlogs(response.data);
     } catch (error) {
       toast.error("Login first");
@@ -44,15 +48,19 @@ const Myblogs = () => {
   };
 
   const handleSubmit = async (e) => {
+    const token = localStorage.getItem("Token");
     e.preventDefault();
     if (blogData.description.split(" ").length < 300) {
       return toast.error("Description must be at least 300 words.");
     }
 
     try {
-      await axios.post("http://localhost:5000/addBlog", { ...blogData, userId, tags: blogData.tags.split(",") });
+      await axios.post("http://localhost:5000/addBlog", 
+        { ...blogData, userId, tags: blogData.tags.split(",") }, {
+          headers : {Authorization: `Bearer ${token}`},
+        } );
       toast.success("Blog posted successfully!");
-      setBlogData({ title: "", image: "", description: "", tags: "" });
+      setBlogData({ title: "", image: "", description: "", tags: ""  , author:""});
       fetchBlogs();
     } catch (error) {
       toast.error("Failed to post blog.");
@@ -60,10 +68,13 @@ const Myblogs = () => {
   };
 
   const handleDelete = async (blogId) => {
+    const token = localStorage.getItem("Token");
     if (!window.confirm("Are you sure you want to delete this blog?")) return;
 
     try {
-      await axios.delete(`http://localhost:5000/deleteBlog/${blogId}`);
+      await axios.delete(`http://localhost:5000/deleteBlog/${blogId}`, {
+        headers : {Authorization: `Bearer ${token}`},
+      });
       toast.success("Blog deleted successfully!");
       fetchBlogs();
     } catch (error) {
@@ -72,6 +83,7 @@ const Myblogs = () => {
   };
 
   const handleUpdate = async () => {
+    const token = localStorage.getItem("Token");
     if (!selectedBlog) return;
 
     if (selectedBlog.description.split(" ").length < 300) {
@@ -79,7 +91,10 @@ const Myblogs = () => {
     }
 
     try {
-      await axios.put(`http://localhost:5000/updateBlog/${selectedBlog._id}`, selectedBlog);
+      await axios.put(`http://localhost:5000/updateBlog/${selectedBlog._id}`,
+         selectedBlog 
+         , {headers : {Authorization: `Bearer ${token}`},
+        });
       toast.success("Blog updated successfully!");
       setShowModal(false);
       fetchBlogs();
@@ -109,8 +124,12 @@ const Myblogs = () => {
         </Form.Group>
 
         <Form.Group className="mb-3">
-          <Form.Label className=" text-light">Author</Form.Label>
+          <Form.Label className=" text-light">Tags (hastags)</Form.Label>
           <Form.Control type="text" name="tags"  className="text-light bg-dark" value={blogData.tags} onChange={handleChange} required />
+        </Form.Group>
+        <Form.Group className="mb-3">
+          <Form.Label className=" text-light">Author Name</Form.Label>
+          <Form.Control type="text" name="author"  className="text-light bg-dark" value={blogData.author} onChange={handleChange} required />
         </Form.Group>
 
         <Button variant="success" type="submit" className=" text-light w-50 mb-5">Post Blog</Button>
@@ -129,13 +148,18 @@ const Myblogs = () => {
                   style={{ height: "200px", objectFit: "cover" }} 
                 />
                 <Card.Body>
-                  <Card.Title className="text-truncate">{blog.title}</Card.Title>
+                <Card.Text className="text-secondary" style={{ fontFamily: "Helvetica, Arial, sans-serif", letterSpacing: "0.5px" ,textTransform: "uppercase"}}>
+                    {blog.tags.join("\u00A0·\u00A0")}
+                  
+                  </Card.Text>
+                  <Card.Title className="text-truncate" style={{fontFamily: "'Montserrat', sans-serif"}}>{blog.title}</Card.Title>
                   <Card.Text className="text-muted">
                     {blog.description.substring(0, 100)}...
                   </Card.Text>
-                  <Card.Text>
-                    <strong>Author Name</strong> {blog.tags.join(", ")}
-                  </Card.Text>
+         <Card.Text className="">
+            {blog.author} <br/>
+            {new Date(blog.createdAt).toISOString().split('T')[0]} &nbsp; 
+          </Card.Text>
                   <Button variant="primary" className="me-2 w-100" onClick={() => navigate(`/blog/${blog._id}`)}>Read More</Button>
                   <Button variant="warning" className="me-2 my-1 w-100" onClick={() => { setSelectedBlog(blog); setShowModal(true); }}>Update</Button>
                   <Button variant="danger" className="me-2 w-100" onClick={() => handleDelete(blog._id)}>Delete</Button>
@@ -196,6 +220,15 @@ const Myblogs = () => {
                   type="text" 
                   value={selectedBlog.tags.join(", ")} 
                   onChange={(e) => setSelectedBlog({ ...selectedBlog, tags: e.target.value.split(",") })}
+                  required 
+                />
+              </Form.Group>
+              <Form.Group className="mb-3">
+                <Form.Label>author</Form.Label>
+                <Form.Control 
+                  type="text" 
+                  value={selectedBlog.author} 
+                  onChange={(e) => setSelectedBlog({ ...selectedBlog, author: e.target.value })}
                   required 
                 />
               </Form.Group>

@@ -1,10 +1,9 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/auth");
-
-const adminMiddleware = async (req, res, next) => {
+const userAuthMiddleware = async (req, res, next) => {
   try {
     
-    const token = req.header("Authorization")?.split(" ")[1]; 
+    const token = req.header("Authorization")?.split(" ")[1];
     if (!token) {
       return res.status(401).json({ message: "Unauthorized: No token provided" });
     }
@@ -14,9 +13,8 @@ const adminMiddleware = async (req, res, next) => {
     req.user = decoded; 
 
     
-    const user = await User.findById(req.user.id);
-    if (!user || !user.isAdmin) {
-      return res.status(403).json({ message: "Access Denied: Admins only" });
+    if (req.user.id !== req.params.id) {
+      return res.status(403).json({ message: "Access Denied: You can only edit your own profile" });
     }
 
     next(); 
@@ -25,4 +23,4 @@ const adminMiddleware = async (req, res, next) => {
   }
 };
 
-module.exports = adminMiddleware;
+module.exports = userAuthMiddleware;

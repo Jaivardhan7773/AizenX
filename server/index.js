@@ -9,9 +9,9 @@ const getUserroutes = require("./routes/userData");
 const blogRoutes = require("./routes/blogRoutes");
 const carouselRoute = require("./routes/carousel")
 const queryRoute = require('./routes/query');
+const Request = require('./routes/requests');
 const PORT = process.env.PORT || 5000;
 const MONGO_URI = process.env.MONGO_URI;
-const os = require("os");
 
 app.use(cors());
 app.use(express.json());
@@ -22,6 +22,7 @@ app.use("/" , getUserroutes);
 app.use("/" , blogRoutes);
 app.use("/" , carouselRoute );
 app.use("/" , queryRoute);
+app.use("/" , Request);
 mongoose.connect(MONGO_URI)
   .then(() => console.log("MongoDB is connected"))
   .catch((e) => console.log(e));

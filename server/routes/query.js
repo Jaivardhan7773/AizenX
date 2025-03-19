@@ -1,7 +1,7 @@
 const express = require('express');
 const Query = require("../models/query");
+const  adminMiddleware  = require("../middleware/adminMiddleware") 
 const router = express.Router();
-
 router.post("/addQuery", async (req, res) => {
     try {
         let { name, email, description } = req.body;
@@ -19,7 +19,7 @@ router.post("/addQuery", async (req, res) => {
     }
 });
 
-router.get("/getQuery", async (req, res) => {
+router.get("/getQuery",adminMiddleware  , async (req, res) => {
     try {
         const allQueries = await Query.find();
 
@@ -36,7 +36,7 @@ router.get("/getQuery", async (req, res) => {
     }
 });
 
-router.delete("/deleteQuery/:id", async (req, res) => {
+router.delete("/deleteQuery/:id", adminMiddleware  ,async (req, res) => {
     try {
         const deleteThat = await Query.findByIdAndDelete(req.params.id);
         if (!deleteThat) {

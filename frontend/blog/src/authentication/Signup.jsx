@@ -3,7 +3,10 @@ import { Container, Form, Button } from "react-bootstrap";
 import { NavLink  , useNavigate} from "react-router-dom";
 import { toast } from "react-toastify";
 import axios from "axios";
+import ReCAPTCHA from "react-google-recaptcha";
+
 const Signup = () => {
+  const [captchaToken, setCaptchaToken] = useState("");
 const navigate = useNavigate();
 const [formData, setFormData] = useState({
     name: "",
@@ -24,7 +27,10 @@ const [formData, setFormData] = useState({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    if (!captchaToken) {
+      toast.error("Please verify that you are human.");
+      return;
+    }
     if (formData.password !== formData.confirmPassword) {
       toast.error("Passwords do not match!");
       return;
@@ -104,7 +110,12 @@ toast.success(response.data.message);
             <Form.Label  className="text-light">Phone Number</Form.Label>
             <Form.Control type="tel" name="phone" placeholder="Enter phone number" value={formData.phone} onChange={handleChange} required />
           </Form.Group>
-
+          <div className="d-flex justify-content-center w-100 mb-3">
+            <ReCAPTCHA
+              sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
+              onChange={(token) => setCaptchaToken(token)}
+            />
+          </div>
           <Button variant="primary" type="submit" className="w-100">Sign Up</Button>
 
           <p className="text-center mt-3 text-light">

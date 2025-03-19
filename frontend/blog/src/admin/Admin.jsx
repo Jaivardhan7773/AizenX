@@ -6,6 +6,7 @@ import Accordion from 'react-bootstrap/Accordion';
 import Adminquery from './adminquery'
 import Admincarousel from "./admincarousel";
 import AdminBlog from "./AdminBlog";
+import EditorRequest from "./EditorRequest";
 const Admin = () => {
   const [users, setUsers] = useState([]);
 
@@ -30,7 +31,42 @@ const Admin = () => {
 
 
 
+  const makeEditor = async (userId) => {
+    const token = localStorage.getItem("Token")
+    try {
+      await axios.patch(`http://localhost:5000/makeEditor/${userId}` , {} , {
+        headers : { Authorization : `Bearer ${token}`}
+      });
+      toast.success("user is now Editor");
+     
+      setUsers((prevUsers) =>
+        prevUsers.map((user) =>
+          user._id === userId ? { ...user, isEditor: true } : user
+        )
+      );
+    }
+    catch (error) {
+      toast.error("cannot make user Editor")
+    }
+  };
 
+  const removeEditor = async (userId) => {
+    try {
+      const token = localStorage.getItem("Token");
+      await axios.patch(`http://localhost:5000/removeEditor/${userId}` , {} ,{
+        headers : {Authorization : `Bearer ${token}`}
+      });
+      toast.success("Editor privileges removed");
+      
+      setUsers((prevUsers) =>
+        prevUsers.map((user) =>
+          user._id === userId ? { ...user, isEditor: false } : user
+        )
+      );
+    } catch (error) {
+      toast.error("Failed to remove Editor");
+    }
+  };
 
 
 
@@ -106,6 +142,7 @@ const Admin = () => {
                     <th>Phone</th>
                     <th>Gender</th>
                     <th>Admin</th>
+                    <th>Editor</th>
                     <th>Action</th>
                   </tr>
                 </thead>
@@ -119,7 +156,27 @@ const Admin = () => {
                         <td>{user.phone}</td>
                         <td>{user.gender}</td>
                         <td>{user.isAdmin ? "✅ Yes" : "❌ No"}</td>
+                        <td>{user.isEditor ? "✅ Yes" : "❌ No"}</td>
                         <td>
+                        {user.isEditor ? (
+                            <Button
+                              variant="warning"
+                              size="sm"
+                              className="me-2"
+                              onClick={() => removeEditor(user._id)}
+                            >
+                              Remove Editor
+                            </Button>
+                          ) : (
+                            <Button
+                              variant="success"
+                              size="sm"
+                              className="me-2"
+                              onClick={() => makeEditor(user._id)}
+                            >
+                              Make Editor
+                            </Button>
+                          )}
                           {user.isAdmin ? (
                             <Button
                               variant="warning"
@@ -205,7 +262,27 @@ const Admin = () => {
 
 
 
+
+
+      
         <Accordion.Item eventKey="3">
+          <Accordion.Header>Manage Editor Forms</Accordion.Header>
+          <Accordion.Body>
+            <Container className="mt-4">
+
+
+
+              <EditorRequest/>
+
+
+            </Container>
+          </Accordion.Body>
+        </Accordion.Item>
+
+
+
+
+        <Accordion.Item eventKey="4">
           <Accordion.Header>Manage Query</Accordion.Header>
           <Accordion.Body>
             <Adminquery />

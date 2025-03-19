@@ -34,31 +34,28 @@ const Allblogs = () => {
     
   return (
     <>
-   <Container className="mt-4">
+    <div className="bg-light">
+   <Container className="mt-4 pt-5">
          <Row>
          {blogs.length > 0 ? (
   blogs.slice(0, 12).map((blog) => ( 
-    <Col xl={3} sm={6} md={4} key={blog._id} className="mb-4">
-      <Card className="cardbg" style={{
-        background: "rgba(255, 255, 255, 0.2)",
-        backdropFilter: "blur(10px)",
-        WebkitBackdropFilter: "blur(10px)",
-        borderRadius: "15px",
-        border: "1px solid rgba(255, 255, 255, 0.3)"
-      }}  data-aos="zoom-in-up">
-        <Card.Img variant="top" src={blog.image} alt={blog.title} style={{ height: "200px", objectFit: "cover" }}
-          onMouseEnter={(e) => (e.target.style.opacity = 1)}
-  onMouseLeave={(e) => (e.target.style.opacity = 0.7)} />
+    <Col lg={6} key={blog._id} className="mb-4">
+      <Card className="cardbg"   data-aos="zoom-in-up" style={{cursor:"pointer"}}  onClick={() => navigate(`/blog/${blog._id}`)}>
+        <Card.Img variant="top" src={blog.image} alt={blog.title} style={{ maxHeight:"400px", minHeight:"400px", objectFit: "cover" }}
+ />
         <Card.Body>
-          <Card.Title className="text-light">{blog.title}</Card.Title>
-          <Card.Text className="text-light">{blog.description.substring(0, 100)}...</Card.Text>
-          <Card.Text className="text-light">
-            <strong>Author</strong> {blog.tags.join(", ")}<br />
-            <strong>Date</strong> {blog.createdAt}
+        <Card.Text className=""> {blog.tags.join("\u00A0·\u00A0")}<br /></Card.Text> 
+          <Card.Title className="">{blog.title}</Card.Title>
+          <Card.Text className="">{blog.description.substring(0, 300)}...</Card.Text>
+          <Card.Text className="text-secondary fw-bold">
+            {blog.author}<br/>
           </Card.Text>
-          <Button variant="primary" onClick={() => navigate(`/blog/${blog._id}`)} className="w-100 gradient-btn">
+          <Card.Text className="">
+            {new Date(blog.createdAt).toISOString().split('T')[0]}
+          </Card.Text>
+          {/* <Button variant="primary" onClick={() => navigate(`/blog/${blog._id}`)} className="w-100 gradient-btn">
             Read Now
-          </Button>
+          </Button> */}
         </Card.Body>
       </Card>
     </Col>
@@ -69,7 +66,7 @@ const Allblogs = () => {
 
          </Row>
        </Container>
-       
+       </div>
     </>
   )
 }

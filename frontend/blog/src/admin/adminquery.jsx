@@ -11,8 +11,11 @@ const Adminquery = () => {
   }, []);
 
   const fetchQueries = async () => {
+    const token = localStorage.getItem("Token");
     try {
-      const response = await axios.get("http://localhost:5000/getQuery");
+      const response = await axios.get("http://localhost:5000/getQuery"  , {
+        headers : { Authorization : `Bearer ${token}`}
+      });
       setQueries(response.data);
     } catch (error) {
       toast.error("Failed to fetch queries. Please try again later.");
@@ -20,8 +23,11 @@ const Adminquery = () => {
   };
 
   const handleDelete = async (queryId) => {
+    const token = localStorage.getItem("Token");
     try {
-      await axios.delete(`http://localhost:5000/deleteQuery/${queryId}`);
+      await axios.delete(`http://localhost:5000/deleteQuery/${queryId}`, {
+        headers : { Authorization : `Bearer ${token}`}
+      });
       toast.success("Query deleted successfully");
       setQueries((prevQueries) => prevQueries.filter(query => query._id !== queryId));
     } catch (error) {

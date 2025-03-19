@@ -17,7 +17,8 @@ import AboutUs from "./components/AboutUs";
 import { Navigate } from "react-router-dom";
 import { AuthContext } from "./store/authentication";
 import { useContext } from "react";
-import { isAuthenticated, isAdmin } from "./utills/auth";
+import { isAuthenticated, isAdmin, isEditor } from "./utills/auth";
+import SongLyrics from "./Lyrics/SongLyrics";
 function App() {
   let { Token } = useContext(AuthContext)
   console.log(Token)
@@ -31,7 +32,7 @@ function App() {
 
 
         <Route path="/login"
-          element={Token ? <Home /> : <Login />
+          element={Token ? <Home/> : <Login />
           }
         />
 
@@ -44,10 +45,12 @@ function App() {
           path="/admin/manage-users"
           element={isAuthenticated() && isAdmin() ? <Admin /> : <Navigate to="/login" />}
         />
-        <Route
+
+<Route
           path="/user/myblogs"
-          element={Token ? <Myblogs /> : <Login />}
+          element={isAuthenticated() && isEditor() ? <Myblogs/> : <Navigate to="/login" />}
         />
+
         <Route
           path="/blog/:id"
           element={Token?<BlogDetails/>:<Login/>
@@ -56,6 +59,7 @@ function App() {
         <Route path="/Userprofile" element={Token?<UserProfile/>:<Login/>} />
         <Route path="/totalblogs" element={<Totalblogs />} />
         <Route path="/aboutus" element={<AboutUs/>}/>
+        <Route path="/vedio" element={<SongLyrics/>}/>
       </Routes>
     </>
   );

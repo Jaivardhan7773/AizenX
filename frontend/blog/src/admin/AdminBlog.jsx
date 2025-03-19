@@ -24,10 +24,13 @@ const AdminBlog = () => {
 
 
     const handleDeleteblog = async (blogId) => {
+      const token = localStorage.getItem("Token");
         if (!window.confirm("Are you sure you want to delete this blog?")) return;
       
         try {
-          await axios.delete(`http://localhost:5000/deleteBlog/${blogId}`);
+          await axios.delete(`http://localhost:5000/deleteBlog/${blogId}` , {
+            headers : {Authorization: `Bearer ${token}`},
+          });
           toast.success("Blog deleted successfully!");
           fetchAllBlogs(); 
         } catch (error) {
@@ -46,10 +49,13 @@ const AdminBlog = () => {
               <Card>
                 <Card.Img variant="top" src={blog.image} alt={blog.title} style={{ height: "200px", objectFit: "cover" }} />
                 <Card.Body>
+                <Card.Text>
+                 {blog.tags.join("\u00A0·\u00A0")}
+                  </Card.Text>
                   <Card.Title>{blog.title}</Card.Title>
                   <Card.Text>{blog.description.substring(0, 100)}...</Card.Text>
                   <Card.Text>
-                    <strong>Author</strong> {blog.tags.join(", ")}
+                 {blog.author}
                   </Card.Text>
                   <Button variant="primary" onClick={() => navigate(`/blog/${blog._id}`)}  className="w-100">
                     Read Now

@@ -3,10 +3,12 @@ import { Container, Form, Button } from "react-bootstrap";
 import { NavLink, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import axios from "axios";
+import ReCAPTCHA from "react-google-recaptcha";
 import { AuthContext } from "../store/authentication";
 
 const Login = () => {
-  let {Token , setToken} = useContext(AuthContext);
+  const [captchaToken, setCaptchaToken] = useState("");
+  let { Token, setToken } = useContext(AuthContext);
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: "",
@@ -23,13 +25,17 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    if (!captchaToken) {
+      toast.error("Please verify that you are human.");
+      return;
+    }
     try {
       const response = await axios.post("http://localhost:5000/login", formData);
       toast.success(response.data.message);
       setToken(response.data.token);
-      localStorage.setItem('user', JSON.stringify(response.data.user)); 
+      localStorage.setItem('user', JSON.stringify(response.data.user));
       localStorage.setItem("Token", response.data.token);
+      localStorage.setItem("userId", response.data.userId);
       window.location.reload();
       navigate("/");
 
@@ -42,12 +48,12 @@ const Login = () => {
     <div className="d-flex justify-content-center align-items-center vh-100 w-100">
       <Container className="d-flex justify-content-center">
         <Form className="p-4 border rounded " onSubmit={handleSubmit} style={{
-        background: "rgba(99, 74, 74, 0.2)",
-        backdropFilter: "blur(10px)",
-        WebkitBackdropFilter: "blur(10px)",
-        borderRadius: "15px",
-        border: "1px solid rgba(255, 255, 255, 0.91)"
-      }}>
+          background: "rgba(99, 74, 74, 0.2)",
+          backdropFilter: "blur(10px)",
+          WebkitBackdropFilter: "blur(10px)",
+          borderRadius: "15px",
+          border: "1px solid rgba(255, 255, 255, 0.91)"
+        }}>
           <h3 className="text-center mb-4 text-light">Login</h3>
 
           <Form.Group className="mb-3">
@@ -63,7 +69,7 @@ const Login = () => {
           </Form.Group>
 
           <Form.Group className="mb-3">
-            <Form.Label  className="text-light">Password</Form.Label>
+            <Form.Label className="text-light">Password</Form.Label>
             <Form.Control
               type="password"
               name="password"
@@ -73,7 +79,12 @@ const Login = () => {
               required
             />
           </Form.Group>
-
+          <div className="d-flex justify-content-center w-100 mb-3">
+            <ReCAPTCHA
+              sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
+              onChange={(token) => setCaptchaToken(token)}
+            />
+          </div>
           <Button variant="primary" type="submit" className="w-100 text-light" >
             Login
           </Button>

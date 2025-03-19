@@ -1,7 +1,7 @@
 import { useState } from "react";
 import React  from 'react'
 import axios from "axios";
-import { ToastContainer, toast } from "react-toastify";
+import {toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 const Queryform = () => {
     const [formData, setFormData] = useState({
@@ -18,7 +18,16 @@ const handleChange = (e) => {
     });
 };
 const handleSubmit = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
+
+  
+  const token = localStorage.getItem("Token");
+  if (!token) {
+    console.log("No token found!");
+    toast.error("Login first to send query");
+    return;
+  }
+
     setLoading(true);
     try{
         await axios.post("http://localhost:5000/addQuery" , formData);

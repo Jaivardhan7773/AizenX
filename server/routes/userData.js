@@ -43,6 +43,42 @@ router.patch("/removeAdmin/:id" ,adminMiddleware, async (req ,res) => {
     }
 })
 
+
+
+//editor code
+router.patch("/makeEditor/:id" , adminMiddleware  , async (req, res) => {
+    try{
+        const user = await User.findById(req.params.id);
+        if(!user){
+            return res.status(404).json({message : "user not found"})
+        }
+        user.isEditor = true;
+        await user.save();
+        res.status(200).json({message:"user is now admin"});
+    }
+    catch(error){
+        res.status(500).json({message:"server error"});
+    }
+    });
+    
+    router.patch("/removeEditor/:id" ,adminMiddleware, async (req ,res) => {
+        try{
+            const user = await User.findById(req.params.id);
+            if(!user){
+                return res.status(404).json({message : "cannot found user"});
+            }
+            user.isEditor = false;
+            await user.save();
+            res.status(200).json({message:"user is now removed from admin position"})
+        }
+        catch(error){
+            res.status(500).json({message:"internal server erorrr"})
+        }
+    });
+    
+
+
+
 router.delete("/deleteUser/:id" ,adminMiddleware, async (req , res) => {
     try{
         const deleteuser = await User.findByIdAndDelete(req.params.id);

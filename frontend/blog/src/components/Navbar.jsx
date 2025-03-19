@@ -18,7 +18,7 @@ const Navbarog = () => {
     if (getUser) {
       setUser(JSON.parse(getUser));
     }
-  }, []); // ✅ Runs only once when component mounts
+  }, []); 
   
   
   
@@ -29,10 +29,20 @@ const Navbarog = () => {
     setUser(null);
     toast.success("Logged out successfully");
     navigate('/login');
+    window.location.reload();
 
   };
 ;  return (
     <>
+    <p style={{
+  whiteSpace: "nowrap", 
+  textAlign: "center", 
+  fontWeight: "bold" ,
+  backgroundColor:"black"
+}} className='mb-0 text-light'>
+  Grab your hip hop gear now!
+</p>
+
 <Navbar expand="lg" className="sticky-top navblur px-lg-5">
   <Container fluid>
     <Navbar.Brand href="#" className="text-light">
@@ -53,9 +63,11 @@ const Navbarog = () => {
   })}>
           Home
         </Nav.Link>
-        <Nav.Link as={NavLink} to="/user/myblogs" className=" px-3">
-          My Blogs
-        </Nav.Link>
+        {user?.isEditor && (
+          <Nav.Link as={NavLink} to="/user/myblogs" className=" px-3">
+             My Blogs
+          </Nav.Link>
+        )}
         <Nav.Link as={NavLink} to="/totalblogs" className=" px-3">
           All Blogs
         </Nav.Link>
@@ -64,6 +76,9 @@ const Navbarog = () => {
             Admin Panel
           </Nav.Link>
         )}
+              <Nav.Link as={NavLink} to="/vedio" className=" px-3">
+          Song Lyrics
+        </Nav.Link>
         <Nav.Link as={NavLink} to="/aboutus" className=" px-3">
           About Us
         </Nav.Link>
