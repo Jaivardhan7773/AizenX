@@ -12,16 +12,15 @@ const queryRoute = require('./routes/query');
 const Request = require('./routes/requests');
 const PORT = process.env.PORT || 5000;
 const MONGO_URI = process.env.MONGO_URI;
+const allowedOrigins = [
+  "https://grillg.netlify.app", 
+  "http://localhost:3000",      
+];
 
-
-
-app.use(
-  cors({
-    origin: "https://grillg.netlify.app",
-    methods: "GET,POST,PUT,DELETE",
-    credentials: true, 
-  })
-);
+app.use(cors({
+  origin: allowedOrigins,
+  credentials: true, 
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use("/", auth);
