@@ -45,7 +45,7 @@ router.get("/allBlogs", async (req, res) => {
     }
   });
 
-  router.get("/blog/:id", async (req, res) => {
+router.get("/blog/:id", async (req, res) => {
     try {
         const blog = await Blog.findById(req.params.id);
         if (!blog) {

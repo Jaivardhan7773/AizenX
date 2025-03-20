@@ -36,8 +36,8 @@ const Login = () => {
       localStorage.setItem('user', JSON.stringify(response.data.user));
       localStorage.setItem("Token", response.data.token);
       localStorage.setItem("userId", response.data.userId);
-      window.location.reload();
       navigate("/");
+      window.location.reload();
 
     } catch (error) {
       toast.error(error.response?.data?.message || "Login failed.");
