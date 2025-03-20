@@ -30,7 +30,7 @@ const Login = () => {
       return;
     }
     try {
-      const response = await axios.post("http://localhost:5000/login", formData);
+      const response = await axios.post("https://grillgblogs.onrender.com/login", formData);
       toast.success(response.data.message);
       setToken(response.data.token);
       localStorage.setItem('user', JSON.stringify(response.data.user));

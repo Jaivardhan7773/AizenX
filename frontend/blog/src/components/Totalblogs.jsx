@@ -31,7 +31,7 @@ const Totalblogs = () => {
 
   const fetchAllBlogs = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/allBlogs");
+      const response = await axios.get("https://grillgblogs.onrender.com/allBlogs");
       setBlogs(response.data);
     } catch (error) {
       toast.error("Failed to fetch blogs.");

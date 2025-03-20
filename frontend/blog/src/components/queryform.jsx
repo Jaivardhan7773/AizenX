@@ -30,7 +30,7 @@ const handleSubmit = async (e) => {
 
     setLoading(true);
     try{
-        await axios.post("http://localhost:5000/addQuery" , formData);
+        await axios.post("https://grillgblogs.onrender.com/addQuery" , formData);
         setFormData({ name: "", email: "", description: "" });
         toast.success("youe message has been sent successfully ")
     }

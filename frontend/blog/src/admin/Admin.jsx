@@ -15,7 +15,7 @@ const Admin = () => {
     const fetchUsers = async () => {
       try {
         const token = localStorage.getItem("Token");
-        const response = await axios.get("http://localhost:5000/getUsers" , {
+        const response = await axios.get("https://grillgblogs.onrender.com/getUsers" , {
           headers : {Authorization: `Bearer ${token}`},
         });
         
@@ -34,7 +34,7 @@ const Admin = () => {
   const makeEditor = async (userId) => {
     const token = localStorage.getItem("Token")
     try {
-      await axios.patch(`http://localhost:5000/makeEditor/${userId}` , {} , {
+      await axios.patch(`https://grillgblogs.onrender.com/makeEditor/${userId}` , {} , {
         headers : { Authorization : `Bearer ${token}`}
       });
       toast.success("user is now Editor");
@@ -53,7 +53,7 @@ const Admin = () => {
   const removeEditor = async (userId) => {
     try {
       const token = localStorage.getItem("Token");
-      await axios.patch(`http://localhost:5000/removeEditor/${userId}` , {} ,{
+      await axios.patch(`https://grillgblogs.onrender.com/removeEditor/${userId}` , {} ,{
         headers : {Authorization : `Bearer ${token}`}
       });
       toast.success("Editor privileges removed");
@@ -73,7 +73,7 @@ const Admin = () => {
   const makeAdmin = async (userId) => {
     const token = localStorage.getItem("Token")
     try {
-      await axios.patch(`http://localhost:5000/makeAdmin/${userId}` , {} , {
+      await axios.patch(`https://grillgblogs.onrender.com/makeAdmin/${userId}` , {} , {
         headers : { Authorization : `Bearer ${token}`}
       });
       toast.success("user is now admin");
@@ -92,7 +92,7 @@ const Admin = () => {
   const removeAdmin = async (userId) => {
     try {
       const token = localStorage.getItem("Token");
-      await axios.patch(`http://localhost:5000/removeAdmin/${userId}` , {} ,{
+      await axios.patch(`https://grillgblogs.onrender.com/removeAdmin/${userId}` , {} ,{
         headers : {Authorization : `Bearer ${token}`}
       });
       toast.success("Admin privileges removed");
@@ -110,7 +110,7 @@ const Admin = () => {
   const handleDelete = async (userId) => {
     const token = localStorage.getItem("Token");
     try {
-      await axios.delete(`http://localhost:5000/deleteUser/${userId}` , {
+      await axios.delete(`https://grillgblogs.onrender.com/deleteUser/${userId}` , {
         headers : {Authorization : `Bearer ${token}`}
       });
       toast.success("user deleted successfully");

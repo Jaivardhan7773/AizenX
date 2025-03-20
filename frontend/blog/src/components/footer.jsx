@@ -16,7 +16,7 @@ const Footer = () => {
     }
   
     try {
-      const response = await axios.post("http://localhost:5000/addRequest", { email });
+      const response = await axios.post("https://grillgblogs.onrender.com/addRequest", { email });
   
       if (response.status === 201) {  
         toast.success("Request submitted successfully!");
@@ -31,7 +31,12 @@ const Footer = () => {
   };
   
   return (
-    <footer className="bg-dark text-light py-4" style={{minHeight:"50vh"}}>
+    <footer className="text-light py-4" style={{minHeight:"50vh" , backgroundImage: "url('https://shopsy-tcj.netlify.app/assets/footer-pattern-mGVwO-y6.jpg')",
+      backgroundSize: "cover", 
+      backgroundPosition: "center",
+      backgroundRepeat: "no-repeat",
+      minHeight:"100%"
+    }}>
       <Container>
         <Row>
       

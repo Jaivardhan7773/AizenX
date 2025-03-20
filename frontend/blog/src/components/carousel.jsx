@@ -24,7 +24,7 @@ const carousel = () => {
 
   const fetchCarousel = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/allCars");
+      const response = await axios.get("https://grillgblogs.onrender.com/allCars");
       setCarouselItems(response.data);
       localStorage.setItem("carousel", JSON.stringify(response.data)); // Update cache
     } catch (error) {

@@ -15,7 +15,7 @@ const AdminBlog = () => {
     
       const fetchAllBlogs = async () => {
         try {
-          const response = await axios.get("http://localhost:5000/allBlogs");
+          const response = await axios.get("https://grillgblogs.onrender.com/allBlogs");
           setBlogs(response.data);
         } catch (error) {
           toast.error("Failed to fetch blogs.");
@@ -28,7 +28,7 @@ const AdminBlog = () => {
         if (!window.confirm("Are you sure you want to delete this blog?")) return;
       
         try {
-          await axios.delete(`http://localhost:5000/deleteBlog/${blogId}` , {
+          await axios.delete(`https://grillgblogs.onrender.com/deleteBlog/${blogId}` , {
             headers : {Authorization: `Bearer ${token}`},
           });
           toast.success("Blog deleted successfully!");

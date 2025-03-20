@@ -13,7 +13,7 @@ const EditorRequest = () => {
   const fetchRequests = async () => {
     const token  = localStorage.getItem("Token");
     try {
-      const response = await axios.get("http://localhost:5000/getrequest" ,{
+      const response = await axios.get("https://grillgblogs.onrender.com/getrequest" ,{
         headers : { Authorization : `Bearer ${token}`}
       });
       setRequests(response.data);
@@ -25,7 +25,7 @@ const EditorRequest = () => {
   const handleDelete = async (requestId) => {
     const token  = localStorage.getItem("Token");
     try {
-      await axios.delete(`http://localhost:5000/deleteRequest/${requestId}` ,{
+      await axios.delete(`https://grillgblogs.onrender.com/deleteRequest/${requestId}` ,{
         headers : { Authorization : `Bearer ${token}`}
       });
       toast.success("Request deleted successfully");

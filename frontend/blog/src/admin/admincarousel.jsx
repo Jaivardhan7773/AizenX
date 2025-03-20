@@ -19,7 +19,7 @@ const AdminCarousel = () => {
 
   const fetchCarousel = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/allCars");
+      const response = await axios.get("https://grillgblogs.onrender.com/allCars");
       setCarouselItems(response.data);
     } catch (error) {
       console.error("Failed to fetch carousel items!", error);
@@ -33,7 +33,7 @@ const AdminCarousel = () => {
     setIsProcessing(true);
     const token = localStorage.getItem("Token");
     try {
-      const res = await axios.post("http://localhost:5000/addCar", formData, {
+      const res = await axios.post("https://grillgblogs.onrender.com/addCar", formData, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setCarouselItems([...carouselItems, res.data.data]);
@@ -52,7 +52,7 @@ const AdminCarousel = () => {
     if (!window.confirm("Are you sure you want to delete this item?")) return;
     const token = localStorage.getItem("Token");
     try {
-      await axios.delete(`http://localhost:5000/deleteCar/${id}`, {
+      await axios.delete(`https://grillgblogs.onrender.com/deleteCar/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setCarouselItems(carouselItems.filter((item) => item._id !== id));
