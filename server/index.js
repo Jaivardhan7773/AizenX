@@ -14,7 +14,14 @@ const PORT = process.env.PORT || 5000;
 const MONGO_URI = process.env.MONGO_URI;
 
 
-app.use(cors());
+
+app.use(
+  cors({
+    origin: "https://grillg.netlify.app",
+    methods: "GET,POST,PUT,DELETE",
+    credentials: true, 
+  })
+);
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use("/", auth);

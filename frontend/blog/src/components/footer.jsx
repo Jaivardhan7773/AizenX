@@ -35,7 +35,7 @@ const Footer = () => {
       backgroundSize: "cover", 
       backgroundPosition: "center",
       backgroundRepeat: "no-repeat",
-      minHeight:"100%"
+     
     }}>
       <Container>
         <Row>
