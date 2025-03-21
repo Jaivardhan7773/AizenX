@@ -30,6 +30,11 @@ app.use("/" , blogRoutes);
 app.use("/" , carouselRoute );
 app.use("/" , queryRoute);
 app.use("/" , Request);
+
+app.get("/", (req, res) => {
+  res.json({ message: "For uptime robot " });
+});
+
 mongoose.connect(MONGO_URI)
   .then(() => console.log("MongoDB is connected"))
   .catch((e) => console.log(e));
