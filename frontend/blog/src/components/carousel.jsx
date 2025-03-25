@@ -56,7 +56,7 @@ const carousel = () => {
           <Spinner animation="border" variant="primary" />
         </div>
       ) : (
-        <Carousel slide={false}  data-aos="zoom-in-up">
+        <Carousel slide={true}  data-aos="zoom-in-up">
           {carouselItems.length > 0 ? (
             carouselItems.map((item) => (
               <Carousel.Item key={item._id} >

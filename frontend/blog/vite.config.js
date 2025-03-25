@@ -5,9 +5,9 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   server: {
-    host: '0.0.0.0', // Allows external access
-    strictPort: true, // Ensures Vite doesn't change ports
-    allowedHosts: ['.ngrok-free.app'], // Allows ngrok URLs
-    port: 5173, // Make sure it matches your frontend port
+    host: '0.0.0.0', 
+    strictPort: true, 
+    allowedHosts: ['.ngrok-free.app'], 
+    port: 3000, 
   }
 })

@@ -65,9 +65,9 @@ const Footer = () => {
             <p>Email: support@blogsbyjay.com</p>
             <p>Phone: +91 6377469206</p>
             <div>
-              <a href="https://facebook.com" className="text-light me-3">Facebook</a>
-              <a href="https://twitter.com" className="text-light me-3">Twitter</a>
-              <a href="https://linkedin.com" className="text-light">LinkedIn</a>
+              <a href="https://www.instagram.com/jaivardhan7773_/#"  target="_blank" className="text-light me-3">Facebook</a>
+              <a href="https://www.instagram.com/jaivardhan7773_/#"  target="_blank" className="text-light me-3">Twitter</a>
+              <a href="https://www.linkedin.com/in/jaivardhan-singh-rathore-9a0149334" target="_blank" className="text-light">LinkedIn</a>
             </div>
 
           
@@ -82,6 +82,7 @@ const Footer = () => {
         style={{ borderRadius: "8px" }}
         value={email}
         onChange={(e) => setEmail(e.target.value)}
+        required
       />
       <button
         className="btn ms-1 btn-primary"

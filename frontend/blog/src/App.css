@@ -51,8 +51,8 @@ footer {
 
 
 .navbar-nav .nav-link.active::after {
-  width: 70%; /* Change this for the active state width */
-  left: 15%;  /* Adjust for centering */
+  width: 70%;
+  left: 15%; 
 }
 
 @media (max-width: 992px) {
@@ -178,4 +178,57 @@ footer {
 .dropdown-animated.show {
   opacity: 1;
   transform: translateY(0);
+}
+.homeimages{
+  object-fit: cover;
+
+}
+.homecards{
+  color: white;
+  border-radius: 15px;
+  overflow: hidden;
+  max-width: 700px;
+  max-height: 700px;
+}
+.card-img-overlay{
+  display: flex;
+ color: white;
+  flex-direction: column;
+  justify-content: flex-end;
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 15px;
+}
+.formbackground {
+  background: url('https://images.pexels.com/photos/269583/pexels-photo-269583.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2') no-repeat center center;
+  background-size: cover;
+  background-attachment: fixed; 
+  height: 100vh; 
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px; 
+}
+.formofhome{
+  width: 1000px;
+}
+@media(max-width:1440px){
+  .formofhome{
+    width: 1000px;
+  }
+}
+@media(max-width:1024px){
+  .formofhome{
+    width: 700px;
+  }
+}
+@media(max-width:768px){
+  .formofhome{
+    width: 600px;
+  }
+}
+@media(max-width:425px){
+  .formofhome{
+    width: 450px;
+  }
 }
