@@ -127,12 +127,9 @@ const Admin = () => {
   return (
     <>
 
-      <Accordion defaultActiveKey="">
-        <Accordion.Item eventKey="0">
-          <Accordion.Header>Manage Users</Accordion.Header>
-          <Accordion.Body>
+  
             <Container className="mt-4">
-              <h2 className="text-center mb-3">User Management</h2>
+              <h2 className="text-center text-light mb-3">User Management</h2>
               <Table striped bordered hover responsive>
                 <thead className="table-dark">
                   <tr>
@@ -213,83 +210,7 @@ const Admin = () => {
                 </tbody>
               </Table>
             </Container>
-          </Accordion.Body>
-        </Accordion.Item>
-
-
-
-
-        
-        <Accordion.Item eventKey="1">
-          <Accordion.Header>Manage All Blogs</Accordion.Header>
-          <Accordion.Body>
-
-
-
-
-
-            <AdminBlog />
-
-
-
-
-
-
-          </Accordion.Body>
-
-
-
-
-
-
-
-
-        </Accordion.Item>
-        <Accordion.Item eventKey="2">
-          <Accordion.Header>Manage Carousel</Accordion.Header>
-          <Accordion.Body>
-            <Container className="mt-4">
-
-
-
-              <Admincarousel />
-
-
-            </Container>
-          </Accordion.Body>
-        </Accordion.Item>
-
-
-
-
-
-
-      
-        <Accordion.Item eventKey="3">
-          <Accordion.Header>Manage Editor Forms</Accordion.Header>
-          <Accordion.Body>
-            <Container className="mt-4">
-
-
-
-              <EditorRequest/>
-
-
-            </Container>
-          </Accordion.Body>
-        </Accordion.Item>
-
-
-
-
-        <Accordion.Item eventKey="4">
-          <Accordion.Header>Manage Query</Accordion.Header>
-          <Accordion.Body>
-            <Adminquery />
-          </Accordion.Body>
-        </Accordion.Item>
-      </Accordion>
-
+       
 
 
     </>

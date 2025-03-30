@@ -102,6 +102,8 @@ const Footer = () => {
           </Col>
         </Row>
       </Container>
+
+
     </footer>
   );
 };

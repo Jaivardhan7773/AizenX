@@ -75,7 +75,7 @@ const AdminCarousel = () => {
     setIsProcessing(true);
     const token = localStorage.getItem("Token");
     try {
-      const response = await axios.put(`http://localhost:5000/updateCar/${editingItem._id}`, formData, {
+      const response = await axios.put(`https://grillgblogs.onrender.com/updateCar/${editingItem._id}`, formData, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setCarouselItems(
@@ -95,7 +95,7 @@ const AdminCarousel = () => {
     <>
       <Row>
         <div className="container mt-4">
-          <h2 className="text-center">Image Carousel</h2>
+          <h2 className="text-center text-light">Image Carousel</h2>
           <div className="text-center mb-3">
             <Button
               variant="success"

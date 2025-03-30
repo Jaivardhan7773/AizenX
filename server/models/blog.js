@@ -7,7 +7,13 @@ const BlogSchema = new mongoose.Schema({
     description: { type: String, required: true, minlength: 300 },
     tags: { type: [String], required: true },
     author: {type: String , required: true},
-    createdAt: { type: Date, default: Date.now }
+    category: { 
+        type: String, 
+        required: true, 
+        enum: ["Technology", "Health", "Education", "Entertainment", "Sports"] 
+    },
+    createdAt: { type: Date, default: Date.now },
+ 
 });
 
 module.exports = mongoose.model("Blog", BlogSchema);

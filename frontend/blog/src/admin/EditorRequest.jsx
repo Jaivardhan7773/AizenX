@@ -41,7 +41,7 @@ const EditorRequest = () => {
 
   return (
     <Container className="mt-4">
-      <h2 className="text-center">User Requests</h2>
+      <h2 className="text-center text-light">User Requests</h2>
       {requests.length > 0 ? (
         <Table striped bordered hover responsive>
           <thead>

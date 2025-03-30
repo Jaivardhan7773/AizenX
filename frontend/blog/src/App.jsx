@@ -6,7 +6,7 @@ import Signup from "./authentication/Signup";
 import Login from "./authentication/Login";
 import Navbarog from "./components/Navbar";
 import Home from "./components/Home";
-import Admin from "./admin/Admin";
+import ComingSoon from "./components/ComingSoon";
 import Myblogs from "./components/Myblogs";
 import BlogDetails from "./components/BlogDetails";
 import { ToastContainer } from "react-toastify";
@@ -18,6 +18,7 @@ import { Navigate } from "react-router-dom";
 import { AuthContext } from "./store/authentication";
 import { useContext } from "react";
 import { isAuthenticated, isAdmin, isEditor } from "./utills/auth";
+import Layout from "./admin/Layout";
 import SongLyrics from "./Lyrics/SongLyrics";
 function App() {
   let { Token } = useContext(AuthContext)
@@ -43,7 +44,7 @@ function App() {
         />
         <Route
           path="/admin/manage-users"
-          element={isAuthenticated() && isAdmin() ? <Admin /> : <Navigate to="/login" />}
+          element={isAuthenticated() && isAdmin() ? <Layout /> : <Navigate to="/login" />}
         />
 
 <Route
@@ -60,6 +61,8 @@ function App() {
         <Route path="/totalblogs" element={<Totalblogs />} />
         <Route path="/aboutus" element={<AboutUs/>}/>
         <Route path="/vedio" element={<SongLyrics/>}/>
+         <Route path="/soon" element={<ComingSoon/>}/>
+   
       </Routes>
     </>
   );

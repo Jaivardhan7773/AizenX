@@ -55,13 +55,18 @@ const Myblogs = () => {
       return toast.error("Description must be at least 300 words.");
     }
 
+
+    if (!blogData.category) {
+      return toast.error("Please select a category.");
+    }
+
     try {
       await axios.post("https://grillgblogs.onrender.com/addBlog",
-        { ...blogData, userId, tags: blogData.tags.split(",") }, {
+        { ...blogData, userId, tags: blogData.tags.split(","), category: blogData.category }, {
         headers: { Authorization: `Bearer ${token}` },
       });
       toast.success("Blog posted successfully!");
-      setBlogData({ title: "", image: "", description: "", tags: "", author: "" });
+      setBlogData({ title: "", image: "", description: "", tags: "", author: "", category: "" });
       fetchBlogs();
     } catch (error) {
       toast.error("Failed to post blog.");
@@ -105,6 +110,8 @@ const Myblogs = () => {
     }
   };
 
+
+
   return (
     <>
       <Container className="mt-4">
@@ -124,18 +131,7 @@ const Myblogs = () => {
             <Form.Label className=" text-light">Description (Minimum 300 words)</Form.Label>
             <Form.Control as="textarea" rows={5} name="description" className="text-light bg-dark" value={blogData.description} onChange={handleChange} required />
           </Form.Group>
-          {/* <Form.Group className="mb-3">
-            <Form.Label className="text-light">Description (Minimum 300 words)</Form.Label>
-            <RichTextEditorComponent
-              name="description"
-              value={blogData.description}
-              change={(e) => handleChange({ target: { name: "description", value: e.value } })}
-              height="300px"
-              className="bg-dark text-light"
-            >
-              <Inject services={[Toolbar]} />
-            </RichTextEditorComponent>
-          </Form.Group> */}
+
 
 
           <Form.Group className="mb-3">
@@ -145,6 +141,18 @@ const Myblogs = () => {
           <Form.Group className="mb-3">
             <Form.Label className=" text-light">Author Name</Form.Label>
             <Form.Control type="text" name="author" className="text-light bg-dark" value={blogData.author} onChange={handleChange} required />
+          </Form.Group>
+
+          <Form.Group className="mb-3">
+            <Form.Label className="text-light">Category</Form.Label>
+            <Form.Select name="category" className="text-light bg-dark" value={blogData.category} onChange={handleChange} required>
+              <option value="">Select Category</option>
+              <option value="Technology">Technology</option>
+              <option value="Health">Health</option>
+              <option value="Education">Education</option>
+              <option value="Entertainment">Entertainment</option>
+              <option value="Sports">Sports</option>
+            </Form.Select>
           </Form.Group>
 
           <Button variant="success" type="submit" className=" text-light w-50 mb-5">Post Blog</Button>
@@ -171,9 +179,13 @@ const Myblogs = () => {
                     <Card.Text className="text-muted">
                       {blog.description.substring(0, 100)}...
                     </Card.Text>
+                    <Card.Text className=" d-flex justify-content-between">
+                      <span className=" fw-bold">{blog.author}</span>
+                      <span className="">{blog.category}</span>
+                    </Card.Text>
                     <Card.Text className="">
-                      {blog.author} <br />
-                      {new Date(blog.createdAt).toISOString().split('T')[0]} &nbsp;
+
+                      {new Date(blog.createdAt).toISOString().split("T")[0]}
                     </Card.Text>
                     <Button variant="primary" className="me-2 w-100" onClick={() => navigate(`/blog/${blog._id}`)}>Read More</Button>
                     <Button variant="warning" className="me-2 my-1 w-100" onClick={() => { setSelectedBlog(blog); setShowModal(true); }}>Update</Button>
@@ -231,7 +243,7 @@ const Myblogs = () => {
 
 
 
-{/* <Form.Group className="mb-3">
+                {/* <Form.Group className="mb-3">
   <Form.Label>Description (Minimum 300 words)</Form.Label>
   <RichTextEditorComponent
     name="description"
@@ -261,6 +273,22 @@ const Myblogs = () => {
                     onChange={(e) => setSelectedBlog({ ...selectedBlog, author: e.target.value })}
                     required
                   />
+                </Form.Group>
+
+                <Form.Group className="mb-3">
+                  <Form.Label>Category</Form.Label>
+                  <Form.Select
+                    value={selectedBlog.category}
+                    onChange={(e) => setSelectedBlog({ ...selectedBlog, category: e.target.value })}
+                    required
+                  >
+                    <option value="">Select Category</option>
+                    <option value="Technology">Technology</option>
+                    <option value="Health">Health</option>
+                    <option value="Finance">Finance</option>
+                    <option value="Education">Education</option>
+                    <option value="Entertainment">Entertainment</option>
+                  </Form.Select>
                 </Form.Group>
               </>
             )}

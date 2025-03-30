@@ -2,29 +2,48 @@ const express = require("express");
 const Blog = require("../models/blog");
 const editorMiddleware = require("../middleware/EditorMiddleware")
 const router = express.Router();
-
+const upload = require("../multerConfig");
 router.post("/addBlog",editorMiddleware ,  async (req, res) => {
     try {
-        let { userId, title, image, description, tags , author } = req.body;
+        let { userId, title, image, description, tags , author , category } = req.body;
 
-        if (!userId || !title || !image || !description || !tags.length ||!author) {
+        if (!userId || !title || !image || !description || !tags.length ||!author|| !category) {
             return res.status(400).json({ message: "All fields are required." });
         }
 
     
-        if (description.split(" ").length < 300) {
-            return res.status(400).json({ message: "Description must be at least 300 words." });
-        }
+     
 
      
         tags = Array.isArray(tags) ? tags : tags.split(",").map(tag => tag.trim());
 
-        const newBlog = new Blog({ userId, title, image, description, tags , author });
+        const allowedCategories = ["Technology", "Health", "Education", "Entertainment", "Sports"];
+
+       
+        if (!allowedCategories.includes(category)) {
+            return res.status(400).json({ message: `Invalid category. Choose from: ${allowedCategories.join(", ")}` });
+        }
+
+        const newBlog = new Blog({ userId, title, image, description, tags , author , category});
         await newBlog.save();
         res.status(201).json({ message: "Blog posted successfully", blog: newBlog });
     } catch (error) {
+      console.error(error); 
         res.status(500).json({ message: "Server error" });
     }
+});
+
+router.post("/upload/blogImage", upload.single("image"), async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ message: "No image uploaded" });
+    }
+
+    res.status(200).json({ message: "Image uploaded successfully", imageUrl: req.file.path });
+  } catch (error) {
+    console.error("Upload Error:", error);
+    res.status(500).json({ message: "Error uploading image", error: error.message });
+  }
 });
 
 router.get("/userBlogs/:userId",editorMiddleware , async (req, res) => {
@@ -59,10 +78,16 @@ router.get("/blog/:id", async (req, res) => {
 
 router.put("/updateBlog/:blogId",editorMiddleware ,  async (req, res) => {
     try {
-      const { title, image, description, tags , author } = req.body;
+      const { title, image, description, tags , author ,category } = req.body;
+
+      const allowedCategories = ["Technology", "Health", "Finance", "Education", "Entertainment"];
+      if (category && !allowedCategories.includes(category)) {
+          return res.status(400).json({ message: "Invalid category selected." });
+      }
+
       const updatedBlog = await Blog.findByIdAndUpdate(
         req.params.blogId,
-        { title, image, description, tags , author },
+        { title, image, description, tags , author ,category },
         { new: true }
       );
   

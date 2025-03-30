@@ -38,7 +38,7 @@ const Adminquery = () => {
   return (
     <>
       <Container className="mt-4">
-        <h2 className="text-center">User Queries</h2>
+        <h2 className="text-center text-light">User Queries</h2>
         {queries.length > 0 ? (
           <Table striped bordered hover responsive>
             <thead>

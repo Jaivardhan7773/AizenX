@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Carousel, Spinner } from "react-bootstrap";
+import { NavLink } from "react-router-dom";
 import AOS from "aos";
 import "aos/dist/aos.css";
 
@@ -43,7 +44,10 @@ const carousel = () => {
         <div class="container">
             <h1 class="fw-bold">Unleash Your Desi Hip <br/> Hop Style</h1>
             <p class="lead">Explore the latest in hip hop fashion, lyrics, and culture tailored for desi enthusiasts.</p>
-            <a href="#" class="btn btn-primary  rounded-pill" style={{minWidth:"100px"}}>Shop</a>
+            <NavLink to="/soon" className="btn btn-primary rounded-pill" style={{ minWidth: "100px" }}>
+  Shop
+</NavLink>
+
             <div class="mt-3">
                 <p class="mb-1">&#9733; &#9733; &#9733; &#9733; &#9733;</p>
                 <p class="mb-0">Rated 5 stars by fans</p>

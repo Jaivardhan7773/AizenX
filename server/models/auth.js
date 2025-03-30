@@ -7,6 +7,7 @@ const AuthSchema = new mongoose.Schema({
     gender: { type: String, enum: ["male", "female", "other"], required: true },
     isAdmin: { type: Boolean, default: false },
     isEditor: { type: Boolean, default: false },
+    profileImage: { type: String, default: "" },
   }, { versionKey: false });
 
 module.exports= mongoose.model('newAuth', AuthSchema);
