@@ -13,7 +13,7 @@ const Request = require('./routes/requests');
 const PORT = process.env.PORT || 5000;
 const MONGO_URI = process.env.MONGO_URI;
 const allowedOrigins = [
-  "https://grillg.netlify.app", 
+  "https://aizenx.netlify.app", 
   "http://localhost:3000",      
 ];
 
