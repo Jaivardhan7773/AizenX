@@ -5,8 +5,9 @@ import "react-toastify/dist/ReactToastify.css";
 import Allblogs from './Allblogs';
 import Carousel from './carousel';
 import Footer from './footer';
-import { NavLink } from "react-router-dom";
+import { NavLink  ,useNavigate} from "react-router-dom";
 const Home = () => {
+   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -114,7 +115,8 @@ setLoading(false);
                     <div class="card-img-overlay">
                         <h4 class="fw-bold">Merchandise</h4>
                         <p>Shop the latest hip hop clothing and accessories.</p>
-                        <button class="btn btn-outline-light w-50 rounded-pill">Shop</button>
+                        <button class="btn btn-outline-light w-50 rounded-pill" onClick={() => navigate("/soon")}>Shop</button>
+                        
                     </div>
                 </div>
             </div>

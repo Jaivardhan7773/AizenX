@@ -14,7 +14,7 @@ const SongLyrics = () => {
             <div class="container">
               <h1 class="fw-bold pb-5">Explore Your Favorite <br /> Song Lyrics</h1>
               <p class="lead">Discover a world of lyrics for every song you love and enjoy ,<br /> lyrics, and culture tailored for desi enthusiasts.</p>
-              <a href="#" class="btn btn-primary  rounded-pill" style={{ minWidth: "100px" }}>Start</a>
+              <a href="#" class="btn btn-primary  rounded-pill mb-4" style={{ minWidth: "100px" }}>Start</a>
               <div class="mt-3">
                 <p class="mb-1 fs-6">&#9733; &#9733; &#9733; &#9733; &#9733;</p>
                 <p class="mb-0 fs-6">Rated 5 stars by fans</p>

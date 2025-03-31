@@ -54,14 +54,16 @@ const Navbarog = () => {
     window.location.reload();
 
   };
+  
 ;  return (
     <>
     <p style={{
   whiteSpace: "nowrap", 
   textAlign: "center", 
   fontWeight: "bold" ,
-  backgroundColor:"black"
-}} className='mb-0 text-light'>
+  backgroundColor:"black",
+  cursor:"pointer"
+}} className='mb-0 text-light' onClick={()=>navigate('/soon')}>
   Grab your hip hop gear now!
 </p>
 

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Carousel, Spinner } from "react-bootstrap";
-import { NavLink } from "react-router-dom";
+import { NavLink , useNavigate } from "react-router-dom";
 import AOS from "aos";
 import "aos/dist/aos.css";
 
@@ -9,6 +9,7 @@ AOS.init();
 
 
 const carousel = () => {
+   const navigate = useNavigate();
   const [carouselItems, setCarouselItems] = useState([]);
   const [loading, setLoading] = useState(true);
 

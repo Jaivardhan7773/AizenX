@@ -1,7 +1,9 @@
 import React from 'react'
 import Footer from './footer';
 import Queryform from './queryform';
+import { NavLink  ,useNavigate} from "react-router-dom";
 const AboutUs = () => {
+   const navigate = useNavigate();
   return (
    <>
    <div  style={{backgroundColor:"white" , minHeight:"100vh"}}>
@@ -9,16 +11,16 @@ const AboutUs = () => {
   <div className="row align-items-center">
   
     <div className="col-lg-6 col-md-6 pb-sm-5 text-center text-lg-start">
-      <h2 className="fw-bold">Discover about Grill G</h2>
+      <h2 className="fw-bold">Discover about Aizen X</h2>
       <p>
-        Grill G is your go-to destination for all things Desi Hip-Hop blogs, delivering the latest news, Memes, updates, and trends in the Indian blog scene. Stay tuned for exclusive content, artist interviews, and much more!
+        AizenX is your go-to destination for all things Desi Hip-Hop blogs, delivering the latest news, Memes, updates, and trends in the Indian blog scene. Stay tuned for exclusive content, artist interviews, and much more!
       </p>
-      <button className="btn btn-outline-dark rounded-pill px-4 py-2">Explore</button>
+      <button className="btn btn-outline-dark rounded-pill px-4 py-2" onClick={()=>navigate('/')}>Explore</button>
     </div>
 
  
     <div className="col-lg-6  col-md-6  text-center">
-      <img src="https://assets.zyrosite.com/cdn-cgi/image/format=auto,w=1080,h=908,fit=crop,trim=2.5662100456621;0;0;0/mk3qxGrDvKI1EJnM/img_3058-AE0ayLpV4QspzWe2.PNG" alt="Grill G" className="img-fluid rounded shadow-lg"/>
+      <img src="https://images.pexels.com/photos/260024/pexels-photo-260024.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="Grill G" className="img-fluid rounded shadow-lg"/>
       
      
       <div className="bg-primary text-white d-flex justify-content-around align-items-center p-3 mt-3 rounded">

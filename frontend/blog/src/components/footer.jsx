@@ -41,7 +41,7 @@ const Footer = () => {
         <Row>
       
           <Col md={4} className="mb-3">
-            <h5>BLOGS WEB.COM</h5>
+            <h5>Aizen.netlify.app</h5>
             <p>
               Your go-to platform for creating and managing Your BLOGS. Explore
               blogs, Stories, and more.
@@ -62,11 +62,11 @@ const Footer = () => {
          
           <Col md={4} className="mb-3">
             <h5>Contact Us</h5>
-            <p>Email: support@blogsbyjay.com</p>
-            <p>Phone: +91 6377469206</p>
+            <p>Email: <a href="mailto:jaivardhansinghrathore17@gmail.com">jaivardhansinghrathore17@gmail.com</a></p>
+            <p>Phone: <a href="tel:+916377469206">+91 6377469206</a></p>
             <div>
-              <a href="https://www.instagram.com/jaivardhan7773_/#"  target="_blank" className="text-light me-3">Facebook</a>
-              <a href="https://www.instagram.com/jaivardhan7773_/#"  target="_blank" className="text-light me-3">Twitter</a>
+              <a href="https://www.instagram.com/jaivardhan7773_/#"  target="_blank" className="text-light me-3">Instagram</a>
+              <a href="https://x.com/Jay_Vardhan7773"  target="_blank" className="text-light me-3">X</a>
               <a href="https://www.linkedin.com/in/jaivardhan-singh-rathore-9a0149334" target="_blank" className="text-light">LinkedIn</a>
             </div>
 
@@ -98,7 +98,7 @@ const Footer = () => {
       
         <Row className="mt-3">
           <Col className="text-center">
-            <p className="mb-0">&copy; {new Date().getFullYear()} BLOGS BY Jay. All Rights Reserved.</p>
+            <p className="mb-0">&copy; {new Date().getFullYear()} AizenX BY Jaivardhan. All Rights Reserved.</p>
           </Col>
         </Row>
       </Container>
