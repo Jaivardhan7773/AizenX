@@ -41,15 +41,7 @@ const Allblogs = () => {
           {currentBlogs.length > 0 ? (
             currentBlogs.map((blog) => (
               <Col lg={6} key={blog._id} className="mb-4">
-                <Card className="cardbg" data-aos="zoom-in-up" style={{ cursor: "pointer" }} onClick={() => {
-
-                  window.open("https://www.effectiveratecpm.com/g47y7n0x3?key=3f52018165eee86ded2da9f1c153acc2", "_blank");
-
-
-                  setTimeout(() => {
-                    navigate(`/blog/${blog._id}`);
-                  }, 3000);
-                }}
+                <Card className="cardbg" data-aos="zoom-in-up" style={{ cursor: "pointer" }} onClick={() =>navigate(`/blog/${blog._id}`)}
                 >
                   <Card.Img variant="top" src={blog.image} alt={blog.title} style={{ maxHeight: "400px", minHeight: "400px", objectFit: "cover" }} />
                   <Card.Body>
