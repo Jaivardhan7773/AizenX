@@ -130,6 +130,7 @@ const Admin = () => {
   
             <Container className="mt-4">
               <h2 className="text-center text-light mb-3">User Management</h2>
+              <div className="table-responsive" style={{ overflowX: 'visible' }}>
               <Table striped bordered hover responsive>
                 <thead className="table-dark">
                   <tr>
@@ -209,6 +210,7 @@ const Admin = () => {
                   )}
                 </tbody>
               </Table>
+              </div>
             </Container>
        
 

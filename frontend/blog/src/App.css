@@ -276,3 +276,13 @@ footer a {
   height: 100%;
   object-fit: cover;
 }
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+}
+
+table {
+  min-width: 1000px; /* Adjust as needed */
+  white-space: nowrap;
+}
+
