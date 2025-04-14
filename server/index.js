@@ -16,6 +16,7 @@ const MONGO_URI = process.env.MONGO_URI;
 const allowedOrigins = [
   "https://aizenx.netlify.app",
   "http://localhost:3000",
+  "https://aizenprivate.netlify.app",
 ];
 
 app.use(cors({
