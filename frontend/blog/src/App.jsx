@@ -13,16 +13,32 @@ import { ToastContainer } from "react-toastify";
 import UserProfile from "./components/UserProfile";
 import Totalblogs from "./components/Totalblogs";
 import ScrollToTop from "./components/ScrollToTop";
+import SplashScreen from "./components/SplashScreen";
+import CommentaryViewer from "./sports/CommentaryViewer";
 import AboutUs from "./components/AboutUs";
+import PageNotFound from "./components/PageNotFound";
+import Addlyrics from "./Lyrics/Addlyrics";
 import { Navigate } from "react-router-dom";
 import { AuthContext } from "./store/authentication";
-import { useContext } from "react";
+import { useContext , useState , useEffect } from "react";
 import { isAuthenticated, isAdmin, isEditor } from "./utills/auth";
 import Layout from "./admin/Layout";
 import SongLyrics from "./Lyrics/SongLyrics";
 function App() {
   let { Token } = useContext(AuthContext)
-  console.log(Token)
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 3000); 
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  // if (isLoading) {
+  //   return <SplashScreen />;
+  // }
   return (
     <>
       <ToastContainer autoClose={3000} position="bottom-right" />
@@ -44,7 +60,7 @@ function App() {
         />
         <Route
           path="/admin/manage-users"
-          element={isAuthenticated() && isAdmin() ? <Layout /> : <Navigate to="/login" />}
+          element={isAuthenticated() && isAdmin() ? <Layout /> : <PageNotFound />}
         />
 
 <Route
@@ -62,6 +78,10 @@ function App() {
         <Route path="/aboutus" element={<AboutUs/>}/>
         <Route path="/vedio" element={<SongLyrics/>}/>
          <Route path="/soon" element={<ComingSoon/>}/>
+         <Route path="/Addlyrics" element={<Addlyrics/>}/>
+         <Route path="*" element={<PageNotFound />} />
+         <Route path="/sports" element={<CommentaryViewer />} />
+
    
       </Routes>
     </>

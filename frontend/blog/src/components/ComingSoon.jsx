@@ -29,9 +29,9 @@ const ComingSoon = () => {
     return (
         <>
         <div className="bg-black">
-           <Container className="text-center text-light" style={{ height: "100vh", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", background: "#000" }}>
+           <Container className="text-center text-light" style={{ height: "88.5vh", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", background: "#000" }}>
             <h1 className="mb-3">Coming Soon</h1>
-            <p className="card-text">i m working on that    </p>
+            <p className="card-text"></p>
             <h3 className="mb-4">
                 {timeLeft.days}d {timeLeft.hours}h {timeLeft.minutes}m {timeLeft.seconds}s
             </h3>

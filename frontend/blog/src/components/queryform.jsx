@@ -30,7 +30,7 @@ const handleSubmit = async (e) => {
 
     setLoading(true);
     try{
-        await axios.post("https://grillgblogs.onrender.com/addQuery" , formData);
+        await axios.post(`${import.meta.env.VITE_API_URL}/addQuery` , formData);
         setFormData({ name: "", email: "", description: "" });
         toast.success("youe message has been sent successfully ")
     }

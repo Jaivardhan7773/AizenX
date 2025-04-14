@@ -1,7 +1,31 @@
-import React from "react";
+import React, { useState, useEffect } from 'react';
+import { Form, Button, Container, Modal, Card, Row, Col } from "react-bootstrap";
+import axios from 'axios';
+import { toast } from 'react-toastify';
 import Footer from "../components/footer";
+const API_SERVER_URL = import.meta.env.VITE_API_BASE_URL;
 
 const SongLyrics = () => {
+  const [lyricsList, setLyricsList] = useState([]);
+  const [selectedSong, setSelectedSong] = useState(null);
+  const handleCardClick = (song) => {
+    setSelectedSong(song);
+  };
+
+  useEffect(() => {
+    fetchLyrics();
+  }, []);
+
+  const fetchLyrics = async () => {
+    try {
+      const res = await axios.get(`${API_SERVER_URL}/getlyrics`);
+      setLyricsList(res.data);
+    } catch (error) {
+      toast.error("Failed to fetch lyrics.");
+      console.error(error);
+    }
+  };
+
   return (
     <>
       <div className="video-container">
@@ -86,6 +110,32 @@ const SongLyrics = () => {
           </div>
         </div>
 
+        <div className="container">
+          <Row>
+            {lyricsList.map((song, index) => (
+              <Col md={4} sm={6} xs={12} key={index} className='mb-4'>
+                <Card className='h-100 shadow' onClick={() => handleCardClick(song)} style={{ cursor: "pointer" }}>
+                  <Card.Body>
+                    <Card.Title>{song.title}</Card.Title>
+                    <Card.Img
+                      variant="top"
+                      src={song.image}
+                      alt={song.title}
+                      style={{ height: "200px", objectFit: "cover" }}
+                    />
+                    <Card.Subtitle className='mb-2 text-muted mt-1'><strong>{song.artist}</strong></Card.Subtitle>
+                    {/* <Card.Text>
+            <div dangerouslySetInnerHTML={{ __html: song.lyrics.substring(0, 100) + '...' }} />
+          </Card.Text> */}
+                    <div className='text-muted small'>Language: {song.language}</div>
+                    {/* <div className='text-muted small'>Tags: {song.hashtags.join(", ")}</div> */}
+                  </Card.Body>
+                </Card>
+              </Col>
+            ))}
+          </Row>
+        </div>
+
 
 
 
@@ -98,7 +148,7 @@ const SongLyrics = () => {
                 Welcome to our site, where music lovers can explore a vast collection of song lyrics.
                 Discover your favorite songs and dive into the world of music with us!
               </p>
-              <button className="btn btn-outline-dark rounded-pill px-4 py-2">Explore</button>
+              <button className="btn btn-outline-dark rounded-pill px-4 mb-3">Explore</button>
             </div>
 
 
@@ -110,7 +160,7 @@ const SongLyrics = () => {
                   className="img-fluid rounded-4 shadow"
                 />
                 <div
-                  className="position-absolute bottom-0 mb-5 start-50 translate-middle-x bg-light shadow-sm rounded-3 p-3"
+                  className="position-absolute bottom-0 mb-3 start-50 translate-middle-x bg-light shadow-sm rounded-3 p-3"
                   style={{ width: "80%", transform: "translateY(50%)" }}
                 >
                   <p className="mb-1 fw-bold">
@@ -125,6 +175,32 @@ const SongLyrics = () => {
 
 
         <div className="container">
+
+          <h4 className='text-center mb-4'>All Uploaded Lyrics</h4>
+
+
+          <Modal show={!!selectedSong} onHide={() => setSelectedSong(null)} centered size="lg">
+            <Modal.Header closeButton >
+              <Modal.Title >{selectedSong?.title}</Modal.Title>
+            </Modal.Header>
+            <Modal.Body className='text-center'>
+              <h6 className='text-muted'>By <strong> {selectedSong?.artist} </strong>| Language: {selectedSong?.language}</h6>
+              <hr />
+              {selectedSong?.image ? (
+                <img
+                  src={selectedSong.image}
+                  alt={selectedSong.title}
+                  style={{ maxHeight: "500px",  width: "100%", borderRadius: "10px" }}
+                  className='mb-3'
+                />
+              ) : (
+                <div className='mb-3 text-muted'>No image available</div>
+              )}
+              <div dangerouslySetInnerHTML={{ __html: selectedSong?.lyrics }} />
+              <hr />
+              <p>{selectedSong?.hashtags?.join(", ")}</p>
+            </Modal.Body>
+          </Modal>
           <img
             src="https://images.unsplash.com/photo-1459305272254-33a7d593a851?ixid=M3wzOTE5Mjl8MHwxfHNlYXJjaHw3fHxzb25nJTIwbHlyaWNzfGVufDB8fHx8MTczNTU3ODA2Mnww&ixlib=rb-4.0.3&auto=format&fit=crop&w=1624&h=688"
             alt="Lyrics Banner"

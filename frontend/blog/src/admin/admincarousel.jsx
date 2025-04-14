@@ -19,7 +19,7 @@ const AdminCarousel = () => {
 
   const fetchCarousel = async () => {
     try {
-      const response = await axios.get("https://grillgblogs.onrender.com/allCars");
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/allCars`);
       setCarouselItems(response.data);
     } catch (error) {
       console.error("Failed to fetch carousel items!", error);
@@ -33,7 +33,7 @@ const AdminCarousel = () => {
     setIsProcessing(true);
     const token = localStorage.getItem("Token");
     try {
-      const res = await axios.post("https://grillgblogs.onrender.com/addCar", formData, {
+      const res = await axios.post(`${import.meta.env.VITE_API_URL}/addCar`, formData, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setCarouselItems([...carouselItems, res.data.data]);
@@ -52,7 +52,7 @@ const AdminCarousel = () => {
     if (!window.confirm("Are you sure you want to delete this item?")) return;
     const token = localStorage.getItem("Token");
     try {
-      await axios.delete(`https://grillgblogs.onrender.com/deleteCar/${id}`, {
+      await axios.delete(`${import.meta.env.VITE_API_URL}/deleteCar/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setCarouselItems(carouselItems.filter((item) => item._id !== id));
@@ -75,7 +75,7 @@ const AdminCarousel = () => {
     setIsProcessing(true);
     const token = localStorage.getItem("Token");
     try {
-      const response = await axios.put(`https://grillgblogs.onrender.com/updateCar/${editingItem._id}`, formData, {
+      const response = await axios.put(`${import.meta.env.VITE_API_URL}/updateCar/${editingItem._id}`, formData, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setCarouselItems(

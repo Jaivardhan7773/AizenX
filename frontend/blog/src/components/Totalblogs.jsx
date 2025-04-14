@@ -8,31 +8,34 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 import { Search } from "lucide-react";
 AOS.init(); // Initialize animation library
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 const Totalblogs = () => {
   const [blogs, setBlogs] = useState([]); // Store all blogs
-  const [visibleBlogs, setVisibleBlogs] = useState(10); // Number of blogs to show initially
+  const [visibleBlogs, setVisibleBlogs] = useState(10); // Number of blogs to show 
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState(""); // Search term for filtering blogs
   const [selectedCategory, setSelectedCategory] = useState(""); // Category filter
-  const observer = useRef(); // Reference for intersection observer
-
+  const observer = useRef();
+  const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
-    fetchAllBlogs(); // Fetch blogs when the component mounts
+    fetchAllBlogs(); 
   }, []);
 
-  // Fetch all blogs from API
+  
   const fetchAllBlogs = async () => {
     try {
-      const response = await axios.get("https://grillgblogs.onrender.com/allBlogs");
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/allBlogs`);
       setBlogs(response.data);
+      setIsLoading(false)
     } catch (error) {
       toast.error("Failed to fetch blogs.");
       console.error("Failed to fetch blogs!", error);
     }
   };
 
-  // Filter blogs based on search term and category
+
   const filteredBlogs = blogs.filter((blog) =>
     (`${blog.title} ${blog.description} ${blog.tags.join(" ")} ${blog.author}`
       .toLowerCase()
@@ -83,61 +86,79 @@ const Totalblogs = () => {
         </div>
 
         <Row>
-          {filteredBlogs.length > 0 ? (
-            filteredBlogs.slice(0, visibleBlogs).map((blog, index) => (
-              <Col
-                xl={6}
-                sm={6}
-                md={6}
-                key={blog._id}
-                className="mb-4"
-                ref={index === visibleBlogs - 1 ? lastBlogRef : null} // Attach observer to last visible blog
-              >
-                <Card
-                  className="cardbg"
-                  style={{
-                    background: "rgba(255, 255, 255, 0.2)",
-                    backdropFilter: "blur(10px)",
-                    WebkitBackdropFilter: "blur(10px)",
-                    borderRadius: "15px",
-                    border: "1px solid rgba(255, 255, 255, 0.3)",
-                    cursor: "pointer",
-                  }}
-                  data-aos="zoom-in-up"
-                  onClick={() => navigate(`/blog/${blog._id}`)}
-                >
-                  <Card.Img
-                    variant="top"
-                    src={blog.image}
-                    alt={blog.title}
-                    style={{ maxHeight: "400px", minHeight: "400px", objectFit: "cover" }}
-                  />
-                  <Card.Body>
-                    {/* Blog Tags */}
-                    <Card.Text className="text-light">
-                      {blog.tags.join("\u00A0~\u00A0")}
-                    </Card.Text>
-                    {/* Blog Title */}
-                    <Card.Title className="text-light">{blog.title}</Card.Title>
-                    {/* Blog Description (first 300 characters) */}
-                    <Card.Text className="text-light">
-                      {blog.description.substring(0, 300)}...
-                    </Card.Text>
-                    <Card.Text className="d-flex justify-content-between">
-                      <span className="text-light fw-bold">{blog.author}</span>
-                      <span className="text-light">{blog.category}</span>
-                    </Card.Text>
-                    <Card.Text className="text-light">
-                      {new Date(blog.createdAt).toISOString().split("T")[0]}
-                    </Card.Text>
-                  </Card.Body>
-                </Card>
-              </Col>
-            ))
-          ) : (
-            <p className="text-center text-light">No blogs available.</p>
-          )}
-        </Row>
+  {isLoading ? (
+    // Show Skeletons while loading
+    [...Array(visibleBlogs)].map((_, index) => (
+      <Col xl={6} sm={6} md={6} key={index} className="mb-4">
+        <Card
+          className="cardbg"
+          style={{
+            background: "rgba(255, 255, 255, 0.2)",
+            backdropFilter: "blur(10px)",
+            WebkitBackdropFilter: "blur(10px)",
+            borderRadius: "15px",
+            border: "1px solid rgba(255, 255, 255, 0.3)",
+            cursor: "pointer",
+          }}
+        >
+          <Skeleton height={400} highlightColor="#bdc3c7"/>
+          <Card.Body>
+            <Skeleton height={20} width="60%" highlightColor="#444" />
+            <Skeleton height={15} count={3} highlightColor="#444" />
+            <Skeleton height={20} width="50%" highlightColor="#444" />
+          </Card.Body>
+        </Card>
+      </Col>
+    ))
+  ) : filteredBlogs.length > 0 ? (
+    filteredBlogs.slice(0, visibleBlogs).map((blog, index) => (
+      <Col
+        xl={6}
+        sm={6}
+        md={6}
+        key={blog._id}
+        className="mb-4"
+        ref={index === visibleBlogs - 1 ? lastBlogRef : null} 
+      >
+        <Card
+          className="cardbg"
+          style={{
+            background: "rgba(255, 255, 255, 0.2)",
+            backdropFilter: "blur(10px)",
+            WebkitBackdropFilter: "blur(10px)",
+            borderRadius: "15px",
+            border: "1px solid rgba(255, 255, 255, 0.3)",
+            cursor: "pointer",
+          }}
+          data-aos="zoom-in-up"
+          onClick={() => navigate(`/blog/${blog._id}`)}
+        >
+          <Card.Img
+            variant="top"
+            src={blog.image}
+            alt={blog.title}
+            style={{ maxHeight: "400px", minHeight: "400px", objectFit: "cover" }}
+          />
+          <Card.Body>
+            <Card.Text className="text-light">{blog.tags.join("\u00A0~\u00A0")}</Card.Text>
+            <Card.Title className="text-light">{blog.title}</Card.Title>
+            <Card.Text className="text-light">{blog.introduction?.substring(0, 300) || ""}...</Card.Text>
+            <Card.Text className="d-flex justify-content-between">
+              <span className="text-light fw-bold">{blog.author}</span>
+              <span className="text-light">{blog.category}</span>
+            </Card.Text>
+            <Card.Text className="text-light">
+              {new Date(blog.createdAt).toISOString().split("T")[0]}
+            </Card.Text>
+          </Card.Body>
+        </Card>
+      </Col>
+    ))
+  ) : (
+    <p className="text-center text-light">No blogs available.</p>
+  )}
+</Row>
+
       </Container>
       <Footer />
     </>

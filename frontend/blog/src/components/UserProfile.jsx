@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Button, Form, Modal, Container, Card } from "react-bootstrap";
+import { Button, Form, Modal, Container, Card  , Spinner} from "react-bootstrap";
 import { toast } from "react-toastify";
 
 const UserProfile = () => {
   const [user, setUser] = useState(null);
   const userId = localStorage.getItem("userId");
   const [imageFile, setImageFile] = useState(null);
+  const [imageuploading , setImageuploading] = useState(false);
   useEffect(() => {
     const fetchUser = async () => {
       const token = localStorage.getItem("Token")
@@ -16,7 +17,7 @@ const UserProfile = () => {
       }
 
       try {
-        const response = await axios.get(`https://grillgblogs.onrender.com/get-user/${userId}` , {
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/get-user/${userId}` , {
           headers: { Authorization: `Bearer ${token}` },
         });
         setUser(response.data);
@@ -43,12 +44,13 @@ const UserProfile = () => {
       toast.error("Please select an image.");
       return;
     }
+    setImageuploading(true);
 
     let formData = new FormData();
     formData.append("profile", imageFile);
 
     try {
-      const response = await axios.post(`https://grillgblogs.onrender.com/upload/profile/${userId}`, formData, {
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/upload/profile/${userId}`, formData, {
         headers: { Authorization: `Bearer ${token}` },
     });
 
@@ -56,8 +58,10 @@ const UserProfile = () => {
         ...prevUser,
         profileImage: response.data.imageUrl,
       }));
+      setImageuploading(false);
       toast.success("Profile image uploaded successfully!");
     } catch (error) {
+      setImageuploading(false);
       toast.error("Error uploading profile image.");
     }
   };
@@ -65,27 +69,29 @@ const UserProfile = () => {
   const handleRemoveImage = async () => {
     const token = localStorage.getItem("Token")
     try {
-      await axios.put(`https://grillgblogs.onrender.com/remove-profile-image/${userId}` , {
+      setImageuploading(true);
+      await axios.put(`${import.meta.env.VITE_API_URL}/remove-profile-image/${userId}` , {
         headers: { Authorization: `Bearer ${token}` },
     });
       setUser((prevUser) => ({
         ...prevUser,
         profileImage: "",
       }));
+      setImageuploading(false);
       toast.success("Profile image removed.");
     } catch (error) {
+      setImageuploading(false);
       toast.error("Failed to remove profile image.");
     }
   };
   
   const handleUpdate = async (e) => {
-    const token = localStorage.getItem("Token")
+    const token = localStorage.getItem("Token");
     e.preventDefault();
   
     try {
-      const response = await axios.put(`https://grillgblogs.onrender.com/updateUser/${userId}`, {
+      const response = await axios.put(`${import.meta.env.VITE_API_URL}/updateUser/${userId}`, {
         name: user.name,
-        email: user.email,
         phone: user.phone,
         gender: user.gender,
       } ,
@@ -93,7 +99,7 @@ const UserProfile = () => {
         headers: { Authorization: `Bearer ${token}` }, 
       });
   
-      setUser(response.data); // Update local state with new user data
+      setUser(response.data); 
       toast.success("Profile updated successfully!");
     } catch (error) {
       console.error("Error updating profile:", error.response?.data || error.message);
@@ -114,28 +120,33 @@ const UserProfile = () => {
           <Card className="p-4 shadow-sm">
             <h4 className="mb-3">Profile Settings</h4>
             <Form >
-              {/* Profile Image */}
+            
               <Form.Group className="mb-3 text-center">
+              <label htmlFor="file-upload" style={{ cursor: "pointer" }}>
               <img
-                src={user.profileImage || "https://cdn-icons-png.flaticon.com/128/3177/3177440.png"}
+                src={user.profileImage || "https://cdn-icons-png.flaticon.com/128/1057/1057240.png"}
                 alt="Profile Preview"
                 style={{
                   width: "100px",
                   height: "100px",
                   borderRadius: "50%",
                   objectFit: "cover",
+                  
                 }}
+                
               />
+              </label>
               <div className="mt-2">
                 {user.profileImage ? (
                   <Button variant="outline-danger" size="sm" onClick={handleRemoveImage}>
-                    Remove Photo
+                    {imageuploading ? <> removing image<Spinner animation="border" size="sm"/></> : "remove image"}
+
                   </Button>
                 ) : (
                   <>
-                    <Form.Control type="file" accept="image/*" onChange={handleFileChange} />
+                    <Form.Control type="file" accept="image/*" id="file-upload" onChange={handleFileChange} />
                     <Button variant="outline-primary" size="sm" className="mt-2" onClick={handleUpload}>
-                      Upload Profile
+{imageuploading ? <> uploading image <Spinner animation="border" size="sm"/></> : "upload profile"}
                     </Button>
                   </>
                 )}
@@ -170,8 +181,9 @@ const UserProfile = () => {
     name="email"
     value={user.email}
     onChange={(e) => setUser({ ...user, email: e.target.value })}
-    required
+    disabled
   />
+  <span className="text-danger">email cant be changed</span>
 </Form.Group>
 
 <Form.Group className="mb-3">

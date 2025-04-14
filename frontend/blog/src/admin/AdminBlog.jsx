@@ -4,7 +4,8 @@ import { Card, Row, Col } from "react-bootstrap";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 const AdminBlog = () => {
     const [blogs, setBlogs] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
@@ -16,8 +17,12 @@ const AdminBlog = () => {
     }, []);
 
     const fetchAllBlogs = async () => {
+        const token = localStorage.getItem("Token")
+
         try {
-            const response = await axios.get("https://grillgblogs.onrender.com/allBlogs");
+            const response = await axios.get(`${import.meta.env.VITE_API_URL}/allBlogs` , {
+                headers : {Authorization : `Bearer${token}`}
+            });
             setBlogs(response.data);
         } catch (error) {
             toast.error("Failed to fetch blogs.");
@@ -29,7 +34,7 @@ const AdminBlog = () => {
         if (!window.confirm("Are you sure you want to delete this blog?")) return;
 
         try {
-            await axios.delete(`https://grillgblogs.onrender.com/deleteBlog/${blogId}`, {
+            await axios.delete(`${import.meta.env.VITE_API_URL}/deleteBlog/${blogId}`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
             toast.success("Blog deleted successfully!");
@@ -94,7 +99,22 @@ const AdminBlog = () => {
                             </Col>
                         ))
                     ) : (
-                        <p className="text-center">No blogs available.</p>
+                        <Row className="mt-3">
+                                  {[1, 2, 3 , 4 , 5 ,6].map((_, idx) => (
+                                    <Col md={4} sm={6} xs={12} key={idx} className="mb-4">
+                                      <Card className="h-100 shadow-sm">
+                                        <Skeleton height={200} />
+                                        <Card.Body>
+                                          <Skeleton height={15} width={`60%`} highlightColor="#444" className="mb-2" />
+                                          <Skeleton height={20} width={`80%`} highlightColor="#444" className="mb-2" />
+                                          <Skeleton count={3} />
+                                          <Skeleton height={30} width={`100%`} highlightColor="#444" className="my-2" />
+                                          <Skeleton height={30} width={`100%`} highlightColor="#444"/>
+                                        </Card.Body>
+                                      </Card>
+                                    </Col>
+                                  ))}
+                                </Row>
                     )}
                 </Row>
             </Container>

@@ -3,23 +3,27 @@ import axios from "axios";
 import { Form, Button, Container, Card, Row, Col, Modal } from "react-bootstrap";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import { RichTextEditorComponent, Toolbar, Inject } from '@syncfusion/ej2-react-richtexteditor';
-import '@syncfusion/ej2-react-richtexteditor/styles/material.css';
+import { Editor } from '@tinymce/tinymce-react';
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
+
+
 import Footer from './footer';
 const Myblogs = () => {
+  const user = JSON.parse(localStorage.getItem("user"));
   const [blogData, setBlogData] = useState({
     title: "",
     image: "",
     description: "",
     tags: "",
-    author: "",
+    author: user?.name || "",
+    introduction: "",
   });
 
   const [blogs, setBlogs] = useState([]);
   const [selectedBlog, setSelectedBlog] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
-  const user = JSON.parse(localStorage.getItem("user"));
   const userId = user?._id;
 
   useEffect(() => {
@@ -35,12 +39,12 @@ const Myblogs = () => {
   const fetchBlogs = async () => {
     const token = localStorage.getItem("Token");
     try {
-      const response = await axios.get(`https://grillgblogs.onrender.com/userBlogs/${userId}`, {
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/userBlogs/${userId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setBlogs(response.data);
     } catch (error) {
-      toast.error("Login first");
+      toast.error("Error");
     }
   };
 
@@ -61,12 +65,12 @@ const Myblogs = () => {
     }
 
     try {
-      await axios.post("https://grillgblogs.onrender.com/addBlog",
+      await axios.post(`${import.meta.env.VITE_API_URL}/addBlog`,
         { ...blogData, userId, tags: blogData.tags.split(","), category: blogData.category }, {
         headers: { Authorization: `Bearer ${token}` },
       });
       toast.success("Blog posted successfully!");
-      setBlogData({ title: "", image: "", description: "", tags: "", author: "", category: "" });
+      setBlogData({ title: "", image: "", description: "", tags: "", author: "", category: "", introduction: "" });
       fetchBlogs();
     } catch (error) {
       toast.error("Failed to post blog.");
@@ -78,7 +82,7 @@ const Myblogs = () => {
     if (!window.confirm("Are you sure you want to delete this blog?")) return;
 
     try {
-      await axios.delete(`https://grillgblogs.onrender.com/deleteBlog/${blogId}`, {
+      await axios.delete(`${import.meta.env.VITE_API_URL}/deleteBlog/${blogId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       toast.success("Blog deleted successfully!");
@@ -97,7 +101,7 @@ const Myblogs = () => {
     }
 
     try {
-      await axios.put(`https://grillgblogs.onrender.com/updateBlog/${selectedBlog._id}`,
+      await axios.put(`${import.meta.env.VITE_API_URL}/updateBlog/${selectedBlog._id}`,
         selectedBlog
         , {
           headers: { Authorization: `Bearer ${token}` },
@@ -125,12 +129,62 @@ const Myblogs = () => {
           <Form.Group className="mb-3">
             <Form.Label className=" text-light">Image URL</Form.Label>
             <Form.Control type="text" name="image" value={blogData.image} className="text-light bg-dark" onChange={handleChange} required />
+            <span className=" text-light">Dont have a link , Make direct link from here : </span> <a href="https://postimages.org/" target="_blank">postimages</a>
+          </Form.Group>
+          <Form.Group className="mb-3">
+            <Form.Label className="text-light">Introduction (40 -50 Words)</Form.Label>
+            <Form.Control
+              as="textarea"
+              rows={4}
+              name="introduction"
+              value={blogData.introduction}
+              className="text-light bg-dark"
+              onChange={handleChange}
+              required
+            />
           </Form.Group>
 
+
+
           <Form.Group className="mb-3">
-            <Form.Label className=" text-light">Description (Minimum 300 words)</Form.Label>
-            <Form.Control as="textarea" rows={5} name="description" className="text-light bg-dark" value={blogData.description} onChange={handleChange} required />
+            <Form.Label className="text-light">Blog (Minimum 300 words)</Form.Label>
+
+            <Editor
+              apiKey="4xd1ww80abs6kodvbdn17y93s8oz8qvebp5aqvy4hc8tb9yo"
+              onEditorChange={(content) =>
+                setBlogData((prevData) => ({ ...prevData, description: content }))
+              }
+              value={blogData.description}
+              init={{
+                height: 500,
+                menubar: true,
+                plugins: [
+                  'advlist',
+                  'autolink',
+                  'lists',
+                  'link',
+                  'image',
+                  'charmap',
+                  'preview',
+                  'anchor',
+                  'searchreplace',
+                  'visualblocks',
+                  'code',
+                  'fullscreen',
+                  'insertdatetime',
+                  'media',
+                  'table',
+                  'help',
+                  'wordcount'
+                ],
+                toolbar:
+                  'undo redo | formatselect | bold italic underline | alignleft aligncenter alignright alignjustify | ' +
+                  'bullist numlist outdent indent | link image media | removeformat | help',
+                content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
+              }}
+            />
           </Form.Group>
+
 
 
 
@@ -140,7 +194,7 @@ const Myblogs = () => {
           </Form.Group>
           <Form.Group className="mb-3">
             <Form.Label className=" text-light">Author Name</Form.Label>
-            <Form.Control type="text" name="author" className="text-light bg-dark" value={blogData.author} onChange={handleChange} required />
+            <Form.Control type="text" name="author" className="text-light bg-dark" value={blogData.author} onChange={handleChange} required readOnly disabled />
           </Form.Group>
 
           <Form.Group className="mb-3">
@@ -162,13 +216,14 @@ const Myblogs = () => {
         {blogs.length > 0 ? (
           <Row className="mt-3">
             {blogs.map((blog) => (
-              <Col md={4} sm={6} xs={12} key={blog._id} className="mb-4">
-                <Card className="h-100 shadow-sm">
+              <Col md={6} sm={6} xs={12} key={blog._id} className="mb-4">
+                <Card className="h-100 shadow-sm"  style={{ cursor: "pointer" }}>
                   <Card.Img
                     variant="top"
                     src={blog.image}
                     alt={blog.title}
-                    style={{ height: "200px", objectFit: "cover" }}
+                    style={{ maxHeight: "300px", objectFit: "cover" }}
+                    onClick={() => navigate(`/blog/${blog._id}`)}
                   />
                   <Card.Body>
                     <Card.Text className="text-secondary" style={{ fontFamily: "Helvetica, Arial, sans-serif", letterSpacing: "0.5px", textTransform: "uppercase" }}>
@@ -177,7 +232,7 @@ const Myblogs = () => {
                     </Card.Text>
                     <Card.Title className="text-truncate" style={{ fontFamily: "'Montserrat', sans-serif" }}>{blog.title}</Card.Title>
                     <Card.Text className="text-muted">
-                      {blog.description.substring(0, 100)}...
+                      {blog.introduction?.substring(0, 200) || "No intro"}...
                     </Card.Text>
                     <Card.Text className=" d-flex justify-content-between">
                       <span className=" fw-bold">{blog.author}</span>
@@ -187,7 +242,6 @@ const Myblogs = () => {
 
                       {new Date(blog.createdAt).toISOString().split("T")[0]}
                     </Card.Text>
-                    <Button variant="primary" className="me-2 w-100" onClick={() => navigate(`/blog/${blog._id}`)}>Read More</Button>
                     <Button variant="warning" className="me-2 my-1 w-100" onClick={() => { setSelectedBlog(blog); setShowModal(true); }}>Update</Button>
                     <Button variant="danger" className="me-2 w-100" onClick={() => handleDelete(blog._id)}>Delete</Button>
                   </Card.Body>
@@ -199,7 +253,22 @@ const Myblogs = () => {
 
 
         ) : (
-          <p className="text-center mt-3 text-light">No blogs posted yet.</p>
+          <Row className="mt-3">
+            {[1, 2, 3, 4, 5, 6].map((_, idx) => (
+              <Col md={4} sm={6} xs={12} key={idx} className="mb-4">
+                <Card className="h-100 shadow-sm">
+                  <Skeleton height={200} />
+                  <Card.Body>
+                    <Skeleton height={15} width={`60%`} highlightColor="#444" className="mb-2" />
+                    <Skeleton height={20} width={`80%`} highlightColor="#444" className="mb-2" />
+                    <Skeleton count={3} />
+                    <Skeleton height={30} width={`100%`} highlightColor="#444" className="my-2" />
+                    <Skeleton height={30} width={`100%`} highlightColor="#444" />
+                  </Card.Body>
+                </Card>
+              </Col>
+            ))}
+          </Row>
         )}
 
 
@@ -231,30 +300,50 @@ const Myblogs = () => {
                 </Form.Group>
 
                 <Form.Group className="mb-3">
-                  <Form.Label>Description (Minimum 300 words)</Form.Label>
+                  <Form.Label>introduction</Form.Label>
                   <Form.Control
+                    as="textarea"
+                    rows={5}
+                    value={selectedBlog.introduction}
+                    onChange={(e) => setSelectedBlog({ ...selectedBlog, introduction: e.target.value })}
+                    required
+                  />
+                </Form.Group>
+
+                <Form.Group className="mb-3">
+                  <Form.Label>Description (Minimum 300 words)</Form.Label>
+                  {/* <Form.Control
                     as="textarea"
                     rows={5}
                     value={selectedBlog.description}
                     onChange={(e) => setSelectedBlog({ ...selectedBlog, description: e.target.value })}
                     required
+                  /> */}
+                  <Editor
+                    apiKey="4xd1ww80abs6kodvbdn17y93s8oz8qvebp5aqvy4hc8tb9yo"
+                    onEditorChange={(content) =>
+                      setSelectedBlog((prevData) => ({ ...prevData, description: content }))
+                    }
+                    value={selectedBlog.description}
+                    init={{
+                      height: 500,
+                      menubar: true,
+                      plugins: [
+                        'advlist autolink lists link image charmap preview anchor',
+                        'searchreplace visualblocks code fullscreen',
+                        'insertdatetime media table code help wordcount'
+                      ],
+                      toolbar:
+                        'undo redo | formatselect | bold italic underline | alignleft aligncenter alignright alignjustify | ' +
+                        'bullist numlist outdent indent | link image media | removeformat | help',
+                      content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
+                    }}
                   />
                 </Form.Group>
 
 
 
-                {/* <Form.Group className="mb-3">
-  <Form.Label>Description (Minimum 300 words)</Form.Label>
-  <RichTextEditorComponent
-    name="description"
-    value={selectedBlog.description}
-    change={(e) => setSelectedBlog({ ...selectedBlog, description: e.value })}
-    height="300px"
-    className="bg-dark text-light"
-  >
-    <Inject services={[Toolbar]} />
-  </RichTextEditorComponent>
-</Form.Group> */}
+
 
                 <Form.Group className="mb-3">
                   <Form.Label>Tags (comma-separated)</Form.Label>
@@ -271,7 +360,7 @@ const Myblogs = () => {
                     type="text"
                     value={selectedBlog.author}
                     onChange={(e) => setSelectedBlog({ ...selectedBlog, author: e.target.value })}
-                    required
+                    disabled
                   />
                 </Form.Group>
 

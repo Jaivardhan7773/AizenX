@@ -5,14 +5,17 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import AOS from "aos";
 import "aos/dist/aos.css";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
+
+
 
 AOS.init();
 
 const Allblogs = () => {
   const [blogs, setBlogs] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const blogsPerPage = 4;
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     fetchAllBlogs();
@@ -20,8 +23,9 @@ const Allblogs = () => {
 
   const fetchAllBlogs = async () => {
     try {
-      const response = await axios.get("https://grillgblogs.onrender.com/allBlogs");
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/allBlogs`);
       setBlogs(response.data);
+      setIsLoading(false)
     } catch (error) {
       toast.error("Failed to fetch blogs.");
       console.error("Failed to fetch blogs!", error);
@@ -29,69 +33,62 @@ const Allblogs = () => {
   };
 
 
-  const totalPages = Math.ceil(blogs.length / blogsPerPage);
-  const indexOfLastBlog = currentPage * blogsPerPage;
-  const indexOfFirstBlog = indexOfLastBlog - blogsPerPage;
-  const currentBlogs = blogs.slice(indexOfFirstBlog, indexOfLastBlog);
 
   return (
     <div className="bg-light">
       <Container className="mt-4 pt-5">
         <Row>
-          {currentBlogs.length > 0 ? (
-            currentBlogs.map((blog) => (
-              <Col lg={6} key={blog._id} className="mb-4">
-                <Card className="cardbg" data-aos="zoom-in-up" style={{ cursor: "pointer" }} onClick={() =>navigate(`/blog/${blog._id}`)}
-                >
-                  <Card.Img variant="top" src={blog.image} alt={blog.title} style={{ maxHeight: "400px", minHeight: "400px", objectFit: "cover" }} />
+          {blogs.length === 0 ? (
+            [...Array(4)].map((_, index) => (
+              <Col lg={6} key={index} className="mb-4">
+                <Card className="cardbg">
+                  <Skeleton height={400} highlightColor="#444" />
                   <Card.Body>
-                    <Card.Text>{blog.tags.join("\u00A0·\u00A0")}<br /></Card.Text>
-                    <Card.Title>{blog.title}</Card.Title>
-                    <Card.Text>{blog.description.substring(0, 300)}...</Card.Text>
-                    <Card.Text className=" d-flex justify-content-between">
-                      <span className="text-secondary fw-bold">{blog.author}</span>
-                      <span>{blog.category}</span>
-                    </Card.Text>
-
-
-                    <Card.Text>{new Date(blog.createdAt).toISOString().split("T")[0]}</Card.Text>
+                    <Skeleton height={20} width="60%" highlightColor="#444" />
+                    <Skeleton height={15} count={3} highlightColor="#444" />
+                    <Skeleton height={20} width="50%" highlightColor="#444" />
                   </Card.Body>
                 </Card>
               </Col>
             ))
           ) : (
-            <p className="text-center">No blogs available.</p>
+            [...blogs].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).slice(0 , 8).map((blog) => (
+
+              <Col lg={6} key={blog._id} className="mb-4">
+                <Card className="cardbg" onClick={() => {
+                  navigate(`/blog/${blog._id}`);
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
+                  style={{
+                    cursor: "pointer",
+                  }}>
+                  <Card.Img
+                    variant="top"
+                    src={blog.image}
+                    alt={blog.title}
+                    style={{
+                      maxHeight: "400px",
+                      minHeight: "400px",
+                      objectFit: "cover",
+                    }}
+                  />
+                  <Card.Body>
+                    <Card.Text>{blog.tags.join(" · ")}</Card.Text>
+                    <Card.Title>{blog.title}</Card.Title>
+                    <Card.Text>{blog.introduction?.substring(0, 300) || "No intro"}...</Card.Text>
+                    <Card.Text className="d-flex justify-content-between wordbreak">
+                      <span className="text-secondary fw-bold">{blog.author}</span>
+                      <span className="wordbreak">{blog.category}</span>
+                    </Card.Text>
+                    <Card.Text>
+                      {new Date(blog.createdAt).toISOString().split("T")[0]}
+                    </Card.Text>
+                  </Card.Body>
+                </Card>
+              </Col>
+            ))
           )}
         </Row>
-
-
-        {totalPages > 1 && (
-          <Pagination className="justify-content-center py-5">
-
-            <Pagination.First onClick={() => setCurrentPage(1)} disabled={currentPage === 1} />
-
-
-            <Pagination.Prev onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))} disabled={currentPage === 1} />
-
-
-            {Array.from({ length: totalPages }, (_, i) => i + 1)
-              .filter(page => page === 1 || page === totalPages || Math.abs(page - currentPage) <= 2)
-              .map((page, index, array) => (
-                <>
-                  {index > 0 && page !== array[index - 1] + 1 && <Pagination.Ellipsis disabled />}
-                  <Pagination.Item key={page} active={page === currentPage} onClick={() => setCurrentPage(page)}>
-                    {page}
-                  </Pagination.Item>
-                </>
-              ))}
-
-
-            <Pagination.Next onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))} disabled={currentPage === totalPages} />
-
-
-            <Pagination.Last onClick={() => setCurrentPage(totalPages)} disabled={currentPage === totalPages} />
-          </Pagination>
-        )}
       </Container>
     </div>
   );

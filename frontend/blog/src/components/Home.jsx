@@ -34,7 +34,7 @@ return;
 
 setLoading(true);
 try{
-    await axios.post("https://grillgblogs.onrender.com/addQuery" , formData);
+    await axios.post(`${import.meta.env.VITE_API_URL}/addQuery` , formData);
     setFormData({ name: "", email: "", description: "" });
     toast.success("youe message has been sent successfully ")
 }
@@ -107,24 +107,24 @@ setLoading(false);
 
 
 </div>
-    <div class="container py-5">
-        <div class="row g-4">
-            <div class="col-md-6">
-                <div class="card homecards">
+    <div className="container py-5">
+        <div className="row g-4">
+            <div className="col-md-6">
+                <div className="card homecards">
                     <img src="https://assets.zyrosite.com/cdn-cgi/image/format=auto,w=861,h=716,fit=crop/mk3qxGrDvKI1EJnM/desi-hip-hop-t-shirt-collection-by-grill-g-YNqP2BVrQ3HXyNbW.png"  className="homeimages" alt="Merchandise"/>
-                    <div class="card-img-overlay">
-                        <h4 class="fw-bold">Merchandise</h4>
+                    <div className="card-img-overlay">
+                        <h4 className="fw-bold">Merchandise</h4>
                         <p>Shop the latest hip hop clothing and accessories.</p>
-                        <button class="btn btn-outline-light w-50 rounded-pill" onClick={() => navigate("/soon")}>Shop</button>
+                        <button className="btn btn-outline-light w-50 rounded-pill" onClick={() => navigate("/soon")}>Shop</button>
                         
                     </div>
                 </div>
             </div>
-            <div class="col-md-6">
-                <div class="card homecards">
+            <div className="col-md-6">
+                <div className="card homecards">
                     <img src="https://images.unsplash.com/photo-1546528377-65924be33e1e?auto=format&fit=crop&w=861&h=716" className="homeimages" alt="Lyrics"/>
-                    <div class="card-img-overlay">
-                        <h4 class="fw-bold">Lyrics</h4>
+                    <div className="card-img-overlay">
+                        <h4 className="fw-bold">Lyrics</h4>
                         <p>Explore and submit your favorite hip hop lyrics.</p>
                         <NavLink to="/vedio">
   <button className="btn btn-outline-light w-50 rounded-pill">View</button>
@@ -136,28 +136,28 @@ setLoading(false);
         </div>
     </div>
 
-
-    <div class="container mt-5 ">
-  <div class="row align-items-center py-5">
+{/* 
+    <div className="container mt-5 ">
+  <div className="row align-items-center py-5">
  
-    <div class="col-md-5">
-      <h2 class="fw-bold">Gallery</h2>
-      <p class="text-muted">
+    <div className="col-md-5">
+      <h2 className="fw-bold">Gallery</h2>
+      <p className="text-muted">
         Explore the vibrant world of desi hip-hop culture here.
       </p>
     </div>
 
    
-    <div class="col-md-7">
-      <div class="d-flex flex-wrap gap-3">
-        <img src="https://images.unsplash.com/photo-1701403320634-89390f3f417f?auto=format&fit=crop&w=656&h=932" class="rounded-4" width="250" height="250" />
-        <img src="https://images.unsplash.com/photo-1702533508365-4e6e6dfda162?auto=format&fit=crop&w=656&h=459" class="rounded-4" width="250" height="250" />
-        <img src="https://images.unsplash.com/photo-1702355605400-2576c5942e9e?auto=format&fit=crop&w=656&h=459" class="rounded-4" width="250" height="250" />
-        <img src="https://images.unsplash.com/photo-1702355605400-2576c5942e9e?auto=format&fit=crop&w=656&h=459" class="rounded-4" width="250" height="250" />
+    <div className="col-md-7">
+      <div className="d-flex flex-wrap gap-3">
+        <img src="https://images.unsplash.com/photo-1701403320634-89390f3f417f?auto=format&fit=crop&w=656&h=932" className="rounded-4" width="250" height="250" />
+        <img src="https://images.unsplash.com/photo-1702533508365-4e6e6dfda162?auto=format&fit=crop&w=656&h=459" className="rounded-4" width="250" height="250" />
+        <img src="https://images.unsplash.com/photo-1702355605400-2576c5942e9e?auto=format&fit=crop&w=656&h=459" className="rounded-4" width="250" height="250" />
+        <img src="https://images.unsplash.com/photo-1702355605400-2576c5942e9e?auto=format&fit=crop&w=656&h=459" className="rounded-4" width="250" height="250" />
       </div>
     </div>
   </div>
-</div>
+</div> */}
 
     </div>
     <Footer/>

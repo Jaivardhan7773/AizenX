@@ -1,12 +1,17 @@
 import React from 'react'
 import Footer from './footer';
 import Queryform from './queryform';
+import AOS from "aos";
+import "aos/dist/aos.css";
+AOS.init();
 import { NavLink  ,useNavigate} from "react-router-dom";
 const AboutUs = () => {
+
    const navigate = useNavigate();
   return (
    <>
    <div  style={{backgroundColor:"white" , minHeight:"100vh"}}>
+    <div style={{backgroundColor:"#c8d6e5"}} data-aos="fade-up">
    <div className="container py-5">
   <div className="row align-items-center">
   
@@ -36,7 +41,14 @@ const AboutUs = () => {
     </div>
   </div>
 </div>
-
+</div>
+<div className="text-white text-center  py-5" data-aos="fade-up" style={{backgroundColor:"#718093" }}>
+        <h1 className="fw-bold pt-5">Music Hub</h1>
+        <p className="lead pb-5">
+          Discover the latest in  music, artists, and hiphop culture through <br />
+          our comprehensive music and blog information platform.
+        </p>
+      </div>
 
  <div className="container pt-5">
   <h1 className='card-title py-5 text-center fw-bold'>
@@ -48,14 +60,14 @@ const AboutUs = () => {
 
   <div className="row justify-content-center align-items-center">
         {/* Left: Contact Form */}
-        <div className="col-lg-6 p-4 bg-light rounded">
+        <div className="col-lg-6 p-4 bg-light rounded" data-aos="fade-right" >
         <Queryform/>
         </div>
 
         {/* Right: Image */}
         <div className="col-lg-5 text-center">
           <img
-            src="https://img.freepik.com/free-vector/gradient-texture-music-festival-youtube-thumbnail_23-2149053645.jpg?t=st=1741436589~exp=1741440189~hmac=9e63c43a5cc69760720f2802db06c0d57027f0ea17c40830a717a944b0c8af52&w=1380"
+            src="https://img.freepik.com/free-vector/company-employees-planning-task-brainstorming_74855-6316.jpg?t=st=1744026762~exp=1744030362~hmac=e1764eaa592512ca7ed4bbf4636dc0abd054a6fcb194361bddc6287397809049&w=1380"
             alt="Contact"
             className="img-fluid rounded shadow-lg"
           />

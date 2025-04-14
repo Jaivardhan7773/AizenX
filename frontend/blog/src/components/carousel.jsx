@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Carousel, Spinner } from "react-bootstrap";
-import { NavLink , useNavigate } from "react-router-dom";
+import { Carousel, Spinner , Row , Col , Card } from "react-bootstrap";
+import { NavLink, useNavigate } from "react-router-dom";
 import AOS from "aos";
 import "aos/dist/aos.css";
-
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 AOS.init();
 
 
 const carousel = () => {
-   const navigate = useNavigate();
+  const navigate = useNavigate();
   const [carouselItems, setCarouselItems] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -26,7 +27,7 @@ const carousel = () => {
 
   const fetchCarousel = async () => {
     try {
-      const response = await axios.get("https://grillgblogs.onrender.com/allCars");
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/allCars`);
       setCarouselItems(response.data);
       localStorage.setItem("carousel", JSON.stringify(response.data)); // Update cache
     } catch (error) {
@@ -35,33 +36,63 @@ const carousel = () => {
       setLoading(false);
     }
   };
-  
-  
+
+
 
   return (
     <div className="container">
 
-<section class="text-center py-5  text-light">
-        <div class="container">
-            <h1 class="fw-bold">Unleash Your Desi Hip <br/> Hop Style</h1>
-            <p class="lead">Explore the latest in hip hop fashion, lyrics, and culture tailored for desi enthusiasts.</p>
-            <NavLink to="/soon" className="btn btn-primary rounded-pill" style={{ minWidth: "100px" }}>
-  Shop
-</NavLink>
+      <section className="text-center py-5  text-light">
+        <div className="container">
+          <h1 className="fw-bold">Unleash Your Desi Hip <br /> Hop Style</h1>
+          <p className="lead">Explore the latest in hip hop fashion, lyrics, and culture tailored for desi enthusiasts.</p>
+          <NavLink to="/soon" className="shopbtn" style={{ minWidth: "100px" }}>
+            Shop
+          </NavLink>
 
-            <div class="mt-3">
-                <p class="mb-1">&#9733; &#9733; &#9733; &#9733; &#9733;</p>
-                <p class="mb-0">Rated 5 stars by fans</p>
-            </div>
+          <div className="mt-3">
+            <p className="mb-1">&#9733; &#9733; &#9733; &#9733; &#9733;</p>
+            <p className="mb-0">Rated 5 stars by fans</p>
+          </div>
         </div>
-    </section>
+      </section>
 
       {loading ? (
-        <div className="text-center">
-          <Spinner animation="border" variant="primary" />
-        </div>
+ <Row className="mt-3">
+ {[1].map((_, idx) => (
+   <Col md={12} key={idx} className="mb-4">
+     <Card className="h-100 shadow-sm border-0">
+       <Skeleton
+         height={400}
+         style={{ borderRadius: "10px", objectFit: "cover" }}
+         baseColor="#ccc"
+         highlightColor="#999"
+       />
+       <Card.Body className="position-absolute bottom-0 start-0 w-100 p-3">
+         <Skeleton
+           height={30}
+           width="40%"
+           style={{
+             borderRadius: "5px",
+             marginBottom: "8px",
+             backgroundColor: "rgba(0,0,0,0.6)",
+           }}
+         />
+         <Skeleton
+           height={20}
+           width="70%"
+           style={{
+             borderRadius: "5px",
+             backgroundColor: "rgba(0,0,0,0.4)",
+           }}
+         />
+       </Card.Body>
+     </Card>
+   </Col>
+ ))}
+</Row>
       ) : (
-        <Carousel slide={true}  data-aos="zoom-in-up">
+        <Carousel slide={true} data-aos="zoom-in-up">
           {carouselItems.length > 0 ? (
             carouselItems.map((item) => (
               <Carousel.Item key={item._id} >
@@ -69,27 +100,59 @@ const carousel = () => {
                   className="d-block w-100"
                   src={item.image}
                   alt={item.title}
-                   style={{
-    height: "400px",
-    objectFit: "cover",
-    borderRadius: "10px",
-    transition: "opacity 0.3s ease-in-out",
-  }}
+                  style={{
+                    height: "400px",
+                    objectFit: "cover",
+                    borderRadius: "10px",
+                    transition: "opacity 0.3s ease-in-out",
+                  }}
 
                 />
                 <Carousel.Caption>
                   <h3>{item.title}</h3>
                   <p className="text-white" style={{
-    backgroundColor: "rgba(0, 0, 0, 0.4)", 
-    display: "inline-block",
-    padding: "5px 10px", 
-    borderRadius: "5px", 
-  }}>{item.description}</p>
+                    backgroundColor: "rgba(0, 0, 0, 0.4)",
+                    display: "inline-block",
+                    padding: "5px 10px",
+                    borderRadius: "5px",
+                  }}>{item.description}</p>
                 </Carousel.Caption>
               </Carousel.Item>
             ))
           ) : (
-            <p className="text-center">No carousel items available.</p>
+            <Row className="mt-3">
+            {[1].map((_, idx) => (
+              <Col md={12} key={idx} className="mb-4">
+                <Card className="h-100 shadow-sm border-0">
+                  <Skeleton
+                    height={400}
+                    style={{ borderRadius: "10px", objectFit: "cover" }}
+                    baseColor="#ccc"
+                    highlightColor="#999"
+                  />
+                  <Card.Body className="position-absolute bottom-0 start-0 w-100 p-3">
+                    <Skeleton
+                      height={30}
+                      width="40%"
+                      style={{
+                        borderRadius: "5px",
+                        marginBottom: "8px",
+                        backgroundColor: "rgba(0,0,0,0.6)",
+                      }}
+                    />
+                    <Skeleton
+                      height={20}
+                      width="70%"
+                      style={{
+                        borderRadius: "5px",
+                        backgroundColor: "rgba(0,0,0,0.4)",
+                      }}
+                    />
+                  </Card.Body>
+                </Card>
+              </Col>
+            ))}
+          </Row>
           )}
         </Carousel>
       )}

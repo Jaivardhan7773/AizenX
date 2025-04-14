@@ -13,7 +13,7 @@ const EditorRequest = () => {
   const fetchRequests = async () => {
     const token  = localStorage.getItem("Token");
     try {
-      const response = await axios.get("https://grillgblogs.onrender.com/getrequest" ,{
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/getrequest` ,{
         headers : { Authorization : `Bearer ${token}`}
       });
       setRequests(response.data);

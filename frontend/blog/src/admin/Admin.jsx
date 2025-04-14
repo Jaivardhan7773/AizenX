@@ -2,24 +2,23 @@ import React, { useEffect, useState } from "react";
 import { Table, Button, Container } from "react-bootstrap";
 import axios from "axios";
 import { toast } from "react-toastify";
-import Accordion from 'react-bootstrap/Accordion';
-import Adminquery from './adminquery'
-import Admincarousel from "./admincarousel";
-import AdminBlog from "./AdminBlog";
-import EditorRequest from "./EditorRequest";
+import "bootstrap/dist/css/bootstrap.min.css";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
+
 const Admin = () => {
   const [users, setUsers] = useState([]);
-
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchUsers = async () => {
       try {
         const token = localStorage.getItem("Token");
-        const response = await axios.get("https://grillgblogs.onrender.com/getUsers" , {
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/getUsers` , {
           headers : {Authorization: `Bearer ${token}`},
         });
-        
         setUsers(response.data);
+        setLoading(false)
       } catch (error) {
         toast.error("Failed to fetch users.");
       }
@@ -34,7 +33,7 @@ const Admin = () => {
   const makeEditor = async (userId) => {
     const token = localStorage.getItem("Token")
     try {
-      await axios.patch(`https://grillgblogs.onrender.com/makeEditor/${userId}` , {} , {
+      await axios.patch(`${import.meta.env.VITE_API_URL}/makeEditor/${userId}` , {} , {
         headers : { Authorization : `Bearer ${token}`}
       });
       toast.success("user is now Editor");
@@ -53,7 +52,7 @@ const Admin = () => {
   const removeEditor = async (userId) => {
     try {
       const token = localStorage.getItem("Token");
-      await axios.patch(`https://grillgblogs.onrender.com/removeEditor/${userId}` , {} ,{
+      await axios.patch(`${import.meta.env.VITE_API_URL}/removeEditor/${userId}` , {} ,{
         headers : {Authorization : `Bearer ${token}`}
       });
       toast.success("Editor privileges removed");
@@ -73,11 +72,11 @@ const Admin = () => {
   const makeAdmin = async (userId) => {
     const token = localStorage.getItem("Token")
     try {
-      await axios.patch(`https://grillgblogs.onrender.com/makeAdmin/${userId}` , {} , {
+      await axios.patch(`${import.meta.env.VITE_API_URL}/makeAdmin/${userId}` , {} , {
         headers : { Authorization : `Bearer ${token}`}
       });
       toast.success("user is now admin");
-      // fetchUsers();
+     
       setUsers((prevUsers) =>
         prevUsers.map((user) =>
           user._id === userId ? { ...user, isAdmin: true } : user
@@ -92,7 +91,7 @@ const Admin = () => {
   const removeAdmin = async (userId) => {
     try {
       const token = localStorage.getItem("Token");
-      await axios.patch(`https://grillgblogs.onrender.com/removeAdmin/${userId}` , {} ,{
+      await axios.patch(`${import.meta.env.VITE_API_URL}/removeAdmin/${userId}` , {} ,{
         headers : {Authorization : `Bearer ${token}`}
       });
       toast.success("Admin privileges removed");
@@ -110,7 +109,7 @@ const Admin = () => {
   const handleDelete = async (userId) => {
     const token = localStorage.getItem("Token");
     try {
-      await axios.delete(`https://grillgblogs.onrender.com/deleteUser/${userId}` , {
+      await axios.delete(`${import.meta.env.VITE_API_URL}/deleteUser/${userId}` , {
         headers : {Authorization : `Bearer ${token}`}
       });
       toast.success("user deleted successfully");
@@ -127,11 +126,30 @@ const Admin = () => {
   return (
     <>
 
+
+{/* <div
+      style={{
+        width: '100%',
+        padding: '40px 20px',
+   
+        textAlign: 'center',
+        fontSize: '2.5rem',
+        color: 'white',
+        fontFamily: 'Arial, sans-serif',
+        background: 'linear-gradient(22deg, rgba(116,255,79,1) 0%, rgba(32,153,131,0.876715652081145)',
+        zIndex: 1, // lower than button
+        position: 'sticky', // required for zIndex to apply
+        top: 0,
+      }}
+      className="sticky-top"
+    >
+      User Management
+    </div> */}
   
             <Container className="mt-4">
               <h2 className="text-center text-light mb-3">User Management</h2>
-              <div className="table-responsive" style={{ overflowX: 'visible' }}>
-              <Table striped bordered hover responsive>
+              <div className="table-responsive">
+              <Table  responsive>
                 <thead className="table-dark">
                   <tr>
                     <th>#</th>
@@ -145,69 +163,68 @@ const Admin = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {users.length > 0 ? (
-                    users.map((user, index) => (
-                      <tr key={user._id}>
-                        <td>{index + 1}</td>
-                        <td>{user.name}</td>
-                        <td>{user.email}</td>
-                        <td>{user.phone}</td>
-                        <td>{user.gender}</td>
-                        <td>{user.isAdmin ? "✅ Yes" : "❌ No"}</td>
-                        <td>{user.isEditor ? "✅ Yes" : "❌ No"}</td>
-                        <td>
-                        {user.isEditor ? (
-                            <Button
-                              variant="warning"
-                              size="sm"
-                              className="me-2"
-                              onClick={() => removeEditor(user._id)}
-                            >
-                              Remove Editor
-                            </Button>
-                          ) : (
-                            <Button
-                              variant="success"
-                              size="sm"
-                              className="me-2"
-                              onClick={() => makeEditor(user._id)}
-                            >
-                              Make Editor
-                            </Button>
-                          )}
-                          {user.isAdmin ? (
-                            <Button
-                              variant="warning"
-                              size="sm"
-                              className="me-2"
-                              onClick={() => removeAdmin(user._id)}
-                            >
-                              Remove Admin
-                            </Button>
-                          ) : (
-                            <Button
-                              variant="success"
-                              size="sm"
-                              className="me-2"
-                              onClick={() => makeAdmin(user._id)}
-                            >
-                              Make Admin
-                            </Button>
-                          )}
-                          <Button variant="danger" size="sm" onClick={() => handleDelete(user._id)}>
-                            Delete
-                          </Button>
-
-                        </td>
-                      </tr>
-                    ))
-                  ) : (
-                    <tr>
-                      <td colSpan="7" className="text-center">
-                        No users found
-                      </td>
-                    </tr>
-                  )}
+                {loading ? (
+      
+      [...Array(5)].map((_, index) => (
+        <tr key={index}>
+          <td><Skeleton width={20} /></td>
+          <td><Skeleton width={100} /></td>
+          <td><Skeleton width={150} /></td>
+          <td><Skeleton width={100} /></td>
+          <td><Skeleton width={60} /></td>
+          <td><Skeleton width={50} /></td>
+          <td><Skeleton width={50} /></td>
+          <td>
+            <Skeleton width={80} height={25} style={{ display: "inline-block", marginRight: "5px" }} />
+            <Skeleton width={80} height={25} style={{ display: "inline-block", marginRight: "5px" }} />
+            <Skeleton width={60} height={25} style={{ display: "inline-block" }} />
+          </td>
+        </tr>
+      ))
+    ) : users.length > 0 ? (
+      users.map((user, index) => (
+        <tr key={user._id}>
+          <td>{index + 1}</td>
+          <td>{user.name}</td>
+          <td>
+          <a className="text-dark" style={{textDecoration : "none"}} href={`mailto:${user.email}`}><strong>{user.email}</strong></a>
+          </td>
+          <td>{user.phone}</td>
+          <td>{user.gender}</td>
+          <td>{user.isAdmin ? "✅ Yes" : "❌ No"}</td>
+          <td>{user.isEditor ? "✅ Yes" : "❌ No"}</td>
+          <td>
+            {user.isEditor ? (
+              <Button variant="warning" size="sm" className="me-2  rounded-pill" onClick={() => removeEditor(user._id)}>
+                Remove Editor
+              </Button>
+            ) : (
+              <Button variant="success" size="sm" className="me-2 rounded-pill" onClick={() => makeEditor(user._id)}>
+                Make Editor
+              </Button>
+            )}
+            {user.isAdmin ? (
+              <Button variant="warning" size="sm" className="me-2 rounded-pill" onClick={() => removeAdmin(user._id)}>
+                Remove Admin
+              </Button>
+            ) : (
+              <Button variant="success" size="sm" className="me-2 rounded-pill" onClick={() => makeAdmin(user._id)}>
+                Make Admin
+              </Button>
+            )}
+            <Button variant="danger" size="sm" className="rounded-pill" onClick={() => handleDelete(user._id)}>
+              Delete
+            </Button>
+          </td>
+        </tr>
+      ))
+    ) : (
+      <tr>
+        <td colSpan="8" className="text-center">
+          No users found
+        </td>
+      </tr>
+    )}
                 </tbody>
               </Table>
               </div>
