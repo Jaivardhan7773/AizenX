@@ -3,11 +3,13 @@ const Blog = require("../models/blog");
 const editorMiddleware = require("../middleware/EditorMiddleware")
 const router = express.Router();
 const upload = require("../multerConfig");
+const apimiddlewarekay = require("../middleware/adminMiddleware");
+
 router.post("/addBlog",editorMiddleware ,  async (req, res) => {
     try {
-        let { userId, title, image, description, tags , author , category } = req.body;
+        let { userId, title, image, introduction , description, tags , author , category } = req.body;
 
-        if (!userId || !title || !image || !description || !tags.length ||!author|| !category) {
+        if (!userId || !title || !image || !introduction || !description || !tags.length ||!author|| !category) {
             return res.status(400).json({ message: "All fields are required." });
         }
 
@@ -24,7 +26,7 @@ router.post("/addBlog",editorMiddleware ,  async (req, res) => {
             return res.status(400).json({ message: `Invalid category. Choose from: ${allowedCategories.join(", ")}` });
         }
 
-        const newBlog = new Blog({ userId, title, image, description, tags , author , category});
+        const newBlog = new Blog({ userId, title, image, introduction , description, tags , author , category});
         await newBlog.save();
         res.status(201).json({ message: "Blog posted successfully", blog: newBlog });
     } catch (error) {
@@ -55,7 +57,7 @@ router.get("/userBlogs/:userId",editorMiddleware , async (req, res) => {
     }
 });
 
-router.get("/allBlogs", async (req, res) => {
+router.get("/allBlogs",  async (req, res) => {
     try {
       const blogs = await Blog.find({});
       res.status(200).json(blogs);
@@ -78,7 +80,7 @@ router.get("/blog/:id", async (req, res) => {
 
 router.put("/updateBlog/:blogId",editorMiddleware ,  async (req, res) => {
     try {
-      const { title, image, description, tags , author ,category } = req.body;
+      const { title, image, description, tags , author , introduction , category } = req.body;
 
       const allowedCategories = ["Technology", "Health", "Finance", "Education", "Entertainment"];
       if (category && !allowedCategories.includes(category)) {
@@ -87,7 +89,7 @@ router.put("/updateBlog/:blogId",editorMiddleware ,  async (req, res) => {
 
       const updatedBlog = await Blog.findByIdAndUpdate(
         req.params.blogId,
-        { title, image, description, tags , author ,category },
+        { title, image, description, tags , introduction , author ,category },
         { new: true }
       );
   
