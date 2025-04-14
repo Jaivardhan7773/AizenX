@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Button, Container, Modal, Card, Row, Col } from "react-bootstrap";
+import { Modal, Card, Row, Col } from "react-bootstrap";
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import Footer from "../components/footer";
-const API_SERVER_URL = import.meta.env.VITE_API_BASE_URL;
+
 
 const SongLyrics = () => {
   const [lyricsList, setLyricsList] = useState([]);
@@ -18,7 +18,7 @@ const SongLyrics = () => {
 
   const fetchLyrics = async () => {
     try {
-      const res = await axios.get(`${API_SERVER_URL}/getlyrics`);
+      const res = await axios.get(`${import.meta.env.VITE_API_URL}/getlyrics`);
       setLyricsList(res.data);
     } catch (error) {
       toast.error("Failed to fetch lyrics.");
@@ -112,7 +112,7 @@ const SongLyrics = () => {
 
         <div className="container">
           <Row>
-            {lyricsList.map((song, index) => (
+            {Array.isArray(lyricsList) && lyricsList.map((song, index) => (
               <Col md={4} sm={6} xs={12} key={index} className='mb-4'>
                 <Card className='h-100 shadow' onClick={() => handleCardClick(song)} style={{ cursor: "pointer" }}>
                   <Card.Body>
