@@ -39,12 +39,12 @@ const Myblogs = () => {
   const fetchBlogs = async () => {
     const token = localStorage.getItem("Token");
     try {
-      const response = await axios.get(`${import.meta.env.VITE_API_URL}/userBlogs/${userId}`, {
+      const response = await axios.get(`http://localhost:5000/userBlogs/${userId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setBlogs(response.data);
     } catch (error) {
-      toast.error("Error");
+      toast.error("Login first");
     }
   };
 
@@ -65,7 +65,7 @@ const Myblogs = () => {
     }
 
     try {
-      await axios.post(`${import.meta.env.VITE_API_URL}/addBlog`,
+      await axios.post("http://localhost:5000/addBlog",
         { ...blogData, userId, tags: blogData.tags.split(","), category: blogData.category }, {
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -82,7 +82,7 @@ const Myblogs = () => {
     if (!window.confirm("Are you sure you want to delete this blog?")) return;
 
     try {
-      await axios.delete(`${import.meta.env.VITE_API_URL}/deleteBlog/${blogId}`, {
+      await axios.delete(`http://localhost:5000/deleteBlog/${blogId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       toast.success("Blog deleted successfully!");
@@ -101,7 +101,7 @@ const Myblogs = () => {
     }
 
     try {
-      await axios.put(`${import.meta.env.VITE_API_URL}/updateBlog/${selectedBlog._id}`,
+      await axios.put(`http://localhost:5000/updateBlog/${selectedBlog._id}`,
         selectedBlog
         , {
           headers: { Authorization: `Bearer ${token}` },
@@ -148,9 +148,7 @@ const Myblogs = () => {
 
           <Form.Group className="mb-3">
             <Form.Label className="text-light">Blog (Minimum 300 words)</Form.Label>
-
             <Editor
-              apiKey="4xd1ww80abs6kodvbdn17y93s8oz8qvebp5aqvy4hc8tb9yo"
               onEditorChange={(content) =>
                 setBlogData((prevData) => ({ ...prevData, description: content }))
               }
@@ -178,11 +176,15 @@ const Myblogs = () => {
                   'wordcount'
                 ],
                 toolbar:
-                  'undo redo | formatselect | bold italic underline | alignleft aligncenter alignright alignjustify | ' +
-                  'bullist numlist outdent indent | link image media | removeformat | help',
-                content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
+                  'undo redo | formatselect | bold italic underline | ' +
+                  'alignleft aligncenter alignright alignjustify | ' +
+                  'bullist numlist outdent indent | link image media | ' +
+                  'removeformat | code preview fullscreen | help',
+                content_style:
+                  'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
               }}
             />
+
           </Form.Group>
 
 
@@ -217,7 +219,7 @@ const Myblogs = () => {
           <Row className="mt-3">
             {blogs.map((blog) => (
               <Col md={6} sm={6} xs={12} key={blog._id} className="mb-4">
-                <Card className="h-100 shadow-sm"  style={{ cursor: "pointer" }}>
+                <Card className="h-100 shadow-sm" style={{ cursor: "pointer" }}>
                   <Card.Img
                     variant="top"
                     src={blog.image}
@@ -320,7 +322,6 @@ const Myblogs = () => {
                     required
                   /> */}
                   <Editor
-                    apiKey="4xd1ww80abs6kodvbdn17y93s8oz8qvebp5aqvy4hc8tb9yo"
                     onEditorChange={(content) =>
                       setSelectedBlog((prevData) => ({ ...prevData, description: content }))
                     }
@@ -329,16 +330,38 @@ const Myblogs = () => {
                       height: 500,
                       menubar: true,
                       plugins: [
-                        'advlist autolink lists link image charmap preview anchor',
-                        'searchreplace visualblocks code fullscreen',
-                        'insertdatetime media table code help wordcount'
+                        'advlist',
+                        'autolink',
+                        'lists',
+                        'link',
+                        'image',
+                        'charmap',
+                        'preview',
+                        'anchor',
+                        'searchreplace',
+                        'visualblocks',
+                        'code',
+                        'fullscreen',
+                        'insertdatetime',
+                        'media',
+                        'table',
+                        'help',
+                        'wordcount'
                       ],
                       toolbar:
-                        'undo redo | formatselect | bold italic underline | alignleft aligncenter alignright alignjustify | ' +
-                        'bullist numlist outdent indent | link image media | removeformat | help',
+                        'undo redo | formatselect | bold italic underline | ' +
+                        'alignleft aligncenter alignright alignjustify | ' +
+                        'bullist numlist outdent indent | link image media | ' +
+                        'removeformat | code preview fullscreen | help',
                       content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
+                      // Self-hosted TinyMCE configuration
+                      url: '/tinymce.min.js', // Path to the locally hosted TinyMCE script
+                      inline: false, // Optional: set to false if you prefer to use a WYSIWYG editor
+                      // Additional self-hosted settings (if needed)
                     }}
                   />
+
+
                 </Form.Group>
 
 

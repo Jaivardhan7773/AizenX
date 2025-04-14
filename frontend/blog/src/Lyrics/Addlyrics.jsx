@@ -65,11 +65,11 @@ const Addlyrics = () => {
                 lyrics,
                 hashtags,
                 image
-              },  {
+            }, {
                 headers: {
-                  Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${token}`
                 }
-              });
+            });
             toast.success("Lyrics added successfully!");
             setFormData({
                 title: "",
@@ -116,8 +116,8 @@ const Addlyrics = () => {
 
 
 
-<div className="container mb-5 py-5 bg-light">
-<h3 className='text-center mb-4'>Add New Song Lyrics</h3>
+            <div className="container mb-5 py-5 bg-light">
+                <h3 className='text-center mb-4'>Add New Song Lyrics</h3>
                 <Form onSubmit={handleSubmit}>
                     <Form.Group className='mb-3'>
                         <Form.Label>Song Name</Form.Label>
@@ -161,7 +161,6 @@ const Addlyrics = () => {
                     <Form.Group className='mb-3'>
                         <Form.Label>Lyrics</Form.Label>
                         <Editor
-                            apiKey='4xd1ww80abs6kodvbdn17y93s8oz8qvebp5aqvy4hc8tb9yo'
                             value={formData.lyrics}
                             init={{
                                 height: 300,
@@ -185,10 +184,18 @@ const Addlyrics = () => {
                                     'help',
                                     'wordcount'
                                 ],
-                                toolbar: 'undo redo | formatselect | bold italic | alignleft aligncenter alignright | bullist numlist | code',
+                                toolbar:
+                                    'undo redo | formatselect | bold italic underline | alignleft aligncenter alignright alignjustify | ' +
+                                    'bullist numlist outdent indent | link image media | removeformat | code | fullscreen | preview | help',
+                                content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
+                                // You might need to specify the path to your self-hosted TinyMCE resources
+                                external_plugins: {
+                                    // Example: 'image': '/path/to/your/custom/image/plugin.js'
+                                },
                             }}
                             onEditorChange={handleEditorChange}
                         />
+
                     </Form.Group>
 
                     <Form.Group className='mb-4'>
@@ -204,7 +211,7 @@ const Addlyrics = () => {
 
                     <Button variant="primary" type="submit" className='w-100'>Submit Lyrics</Button>
                 </Form>
-</div>
+            </div>
 
 
             <div className="container">
@@ -260,7 +267,7 @@ const Addlyrics = () => {
 
 
             <Container className='py-5 '>
-            
+
 
 
 
