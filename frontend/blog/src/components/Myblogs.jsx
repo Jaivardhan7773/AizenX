@@ -39,7 +39,7 @@ const Myblogs = () => {
   const fetchBlogs = async () => {
     const token = localStorage.getItem("Token");
     try {
-      const response = await axios.get(`http://localhost:5000/userBlogs/${userId}`, {
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/userBlogs/${userId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setBlogs(response.data);
@@ -65,7 +65,7 @@ const Myblogs = () => {
     }
 
     try {
-      await axios.post("http://localhost:5000/addBlog",
+      await axios.post(`${import.meta.env.VITE_API_URL}/addBlog`,
         { ...blogData, userId, tags: blogData.tags.split(","), category: blogData.category }, {
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -82,7 +82,7 @@ const Myblogs = () => {
     if (!window.confirm("Are you sure you want to delete this blog?")) return;
 
     try {
-      await axios.delete(`http://localhost:5000/deleteBlog/${blogId}`, {
+      await axios.delete(`${import.meta.env.VITE_API_URL}/deleteBlog/${blogId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       toast.success("Blog deleted successfully!");
@@ -101,7 +101,7 @@ const Myblogs = () => {
     }
 
     try {
-      await axios.put(`http://localhost:5000/updateBlog/${selectedBlog._id}`,
+      await axios.put(`${import.meta.env.VITE_API_URL}/updateBlog/${selectedBlog._id}`,
         selectedBlog
         , {
           headers: { Authorization: `Bearer ${token}` },
