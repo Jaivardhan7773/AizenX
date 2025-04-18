@@ -87,7 +87,7 @@ const Totalblogs = () => {
 
         <Row>
   {isLoading ? (
-    // Show Skeletons while loading
+   
     [...Array(visibleBlogs)].map((_, index) => (
       <Col xl={6} sm={6} md={6} key={index} className="mb-4">
         <Card

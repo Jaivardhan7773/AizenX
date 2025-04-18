@@ -8,6 +8,7 @@ const OTP = require('../models/otpSchema');
 const nodemailer = require("nodemailer");
 const crypto = require("crypto");
 require("dotenv").config();
+const userAuthMiddleware = require("../middleware/userAuthMiddleware");
 
 
 
@@ -179,7 +180,7 @@ router.post("/signup", async (req, res) => {
 });
 
 
-router.post("/upload/profile/:id", upload.single("profile"), async (req, res) => {
+router.post("/upload/profile/:id", userAuthMiddleware , upload.single("profile"), async (req, res) => {
   try {
     const userId = req.params.id;
 
@@ -192,7 +193,7 @@ router.post("/upload/profile/:id", upload.single("profile"), async (req, res) =>
       return res.status(404).json({ message: "User not found in DB" });
     }
 
-    const imageUrl = req.file.path; // Cloudinary URL
+    const imageUrl = req.file.path; 
 
     user.profileImage = imageUrl;
     await user.save();
@@ -210,8 +211,8 @@ router.post("/upload/profile/:id", upload.single("profile"), async (req, res) =>
 
 
 
-router.put("/remove-profile-image/:id", async (req, res) => {
-  try {
+router.delete("/remove-profile-image/:id", userAuthMiddleware ,async (req, res) => {
+  try { 
     const user = await User.findById(req.params.id);
     if (!user) return res.status(404).json({ message: "User not found" });
 

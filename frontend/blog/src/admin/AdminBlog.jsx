@@ -84,7 +84,7 @@ const AdminBlog = () => {
                                     <Card.Body>
                                         <Card.Text>{blog.tags.join(" · ")}</Card.Text>
                                         <Card.Title>{blog.title}</Card.Title>
-                                        <Card.Text>{blog.description.substring(0, 100)}...</Card.Text>
+                                        <Card.Text>{blog.introduction?.substring(0, 100) || ""}...</Card.Text>
                                         <Card.Text className="d-flex justify-content-between">
                                             <span className="fw-bold">{blog.author}</span>
                                             <span>{blog.category}</span>

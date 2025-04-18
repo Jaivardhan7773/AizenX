@@ -154,15 +154,16 @@ const Footer = () => {
 
           </Col>
         </Row>
-
-
-        <Row className="mt-3">
-          <Col className="text-center">
-            <p className="mb-0">&copy; {new Date().getFullYear()} AizenX BY Jaivardhan. All Rights Reserved.</p>
-          </Col>
-        </Row>
+    
       </Container>
+      <hr style={{border: 'none', height: '1px' , backgroundColor:' white', width: '100%'}} />
 
+
+<Row className="mt-3">
+  <Col className="text-center">
+    <p className="mb-0">&copy; {new Date().getFullYear()} AizenX BY Jaivardhan. All Rights Reserved.</p>
+  </Col>
+</Row>
 
     </footer>
   );

@@ -6,10 +6,12 @@ import { useNavigate } from "react-router-dom";
 import { Editor } from '@tinymce/tinymce-react';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
-
+import AOS from "aos";
+import "aos/dist/aos.css";
 
 import Footer from './footer';
 const Myblogs = () => {
+  AOS.init();
   const user = JSON.parse(localStorage.getItem("user"));
   const [blogData, setBlogData] = useState({
     title: "",
@@ -219,7 +221,7 @@ const Myblogs = () => {
           <Row className="mt-3">
             {blogs.map((blog) => (
               <Col md={6} sm={6} xs={12} key={blog._id} className="mb-4">
-                <Card className="h-100 shadow-sm" style={{ cursor: "pointer" }}>
+                <Card className="h-100 shadow-sm" data-aos="zoom-in-up" style={{ cursor: "pointer" }}>
                   <Card.Img
                     variant="top"
                     src={blog.image}

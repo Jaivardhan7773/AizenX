@@ -70,7 +70,7 @@ const UserProfile = () => {
     const token = localStorage.getItem("Token")
     try {
       setImageuploading(true);
-      await axios.put(`${import.meta.env.VITE_API_URL}/remove-profile-image/${userId}` , {
+      await axios.delete(`${import.meta.env.VITE_API_URL}/remove-profile-image/${userId}` , {
         headers: { Authorization: `Bearer ${token}` },
     });
       setUser((prevUser) => ({

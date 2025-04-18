@@ -55,7 +55,7 @@ const Allblogs = () => {
             [...blogs].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).slice(0 , 8).map((blog) => (
 
               <Col lg={6} key={blog._id} className="mb-4">
-                <Card className="cardbg" onClick={() => {
+                <Card className="cardbg"  data-aos="zoom-in-up" onClick={() => {
                   navigate(`/blog/${blog._id}`);
                   window.scrollTo({ top: 0, behavior: 'smooth' });
                 }}
